@@ -1,0 +1,69 @@
+@startuml
+
+title Ahnenbaum Domain Diagram
+
+'!theme mono
+'COMMENT - skinparam linetype ortho
+
+class City {
+
+	String name
+
+}
+
+class Person {
+
+	LocalDateTime dateOfBirth
+	LocalDateTime dateOfDeath
+	String name
+
+}
+
+enum Gender {
+
+	FEMALE,
+	MALE,
+	OTHER;
+
+}
+
+class Profession {
+
+	String name
+
+}
+
+class PersonProfession {
+
+	LocalDateTime from
+	LocalDateTime to
+
+}
+
+class Relation {
+}
+
+enum RelationType {
+
+	ADOPTIVE_FATHER,
+	ADOPTIVE_MOTHER,
+	FATHER,
+	MOTHER,
+	STEP_FATHER,
+	STEP_MOTHER;
+
+}
+
+Person "*" --> "1" City : bornIn
+Person "*" --> "1" City : diedIn
+Person "*" -LEFT-> "1" Gender : gender
+
+PersonProfession "1" -LEFT-> "1" Person : person
+PersonProfession "1" -DOWN-> "1" Profession : profession
+
+Relation "1" --> "1" Person : person
+Relation "1" --> "1" Person : inRelationWith
+Relation "*" -UP-> "1" RelationType : relationType
+
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+
+'!theme mono
+'COMMENT - skinparam linetype ortho
+
+component ahnenbaum as "ahnenbaum" {
+
+	component service
+
+}
+
+@enduml
