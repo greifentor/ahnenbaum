@@ -2,18 +2,15 @@ package de.ollie.ahnenbaum.core.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import lombok.Data;
-import lombok.Generated;
-import lombok.experimental.Accessors;
 
-@Accessors(chain = true)
-@Data
-@Generated
-public class PersonProfession {
+public interface PersonProfession {
+	UUID getId();
 
-	private UUID uuid;
-	private LocalDateTime from;
-	private Person person;
-	private Profession profession;
-	private LocalDateTime to;
+	LocalDateTime getFrom();
+
+	Person getPerson();
+
+	Profession getProfession();
+
+	LocalDateTime getTo();
 }
