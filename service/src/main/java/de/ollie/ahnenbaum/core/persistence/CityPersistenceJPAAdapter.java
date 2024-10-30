@@ -3,7 +3,10 @@ package de.ollie.ahnenbaum.core.persistence;
 import static de.ollie.ahnenbaum.util.Check.ensure;
 
 import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.core.model.impl.CityModel;
+import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
+import de.ollie.ahnenbaum.core.persistence.factory.CityDBOFactory;
+import de.ollie.ahnenbaum.core.persistence.mapper.CityDBOMapper;
+import de.ollie.ahnenbaum.core.persistence.repository.CityDBORepository;
 import de.ollie.ahnenbaum.core.service.UUIDService;
 import de.ollie.ahnenbaum.core.service.port.CityPersistencePort;
 import jakarta.inject.Named;
@@ -16,13 +19,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
+	private final CityDBOFactory factory;
+	private final CityDBOMapper mapper;
+	private final CityDBORepository repository;
 	private final UUIDService uuidService;
 
 	@Override
 	public City create(String name) {
 		ensure(name != null, "name cannot be null!");
 		ensure(!name.isBlank(), "name cannot be blank!");
-		return new CityModel().setId(uuidService.create()).setName(name);
+		CityDBO city = factory.create(name);
+		return mapper.toModel(repository.save(city));
 	}
 
 	@Override

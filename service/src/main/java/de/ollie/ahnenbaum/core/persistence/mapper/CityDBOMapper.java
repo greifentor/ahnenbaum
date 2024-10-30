@@ -14,4 +14,11 @@ public class CityDBOMapper {
 		}
 		return new CityModel().setId(dbo.getId()).setName(dbo.getName());
 	}
+
+	public CityDBO toDBO(CityModel model) {
+		if (model == null) {
+			return null;
+		}
+		return new CityDBO().setId(model.getId()).setName(model.getName());
+	}
 }

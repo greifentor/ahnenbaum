@@ -1,13 +1,14 @@
 package de.ollie.ahnenbaum.core.persistence;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.core.service.UUIDService;
-import java.util.UUID;
+import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
+import de.ollie.ahnenbaum.core.persistence.factory.CityDBOFactory;
+import de.ollie.ahnenbaum.core.persistence.mapper.CityDBOMapper;
+import de.ollie.ahnenbaum.core.persistence.repository.CityDBORepository;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +20,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CityPersistenceJPAAdapterTest {
 
 	private static final String NAME = "name";
-	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private UUIDService uuidService;
+	private City model;
+
+	@Mock
+	private CityDBO dbo;
+
+	@Mock
+	private CityDBOFactory factory;
+
+	@Mock
+	private CityDBOMapper mapper;
+
+	@Mock
+	private CityDBORepository repository;
 
 	@InjectMocks
 	private CityPersistenceJPAAdapter unitUnderTest;
@@ -41,28 +53,15 @@ class CityPersistenceJPAAdapterTest {
 		}
 
 		@Test
-		void returnsANewCity_withNewId() {
+		void returnsANewCity() {
 			// Prepare
-			when(uuidService.create()).thenReturn(UID);
+			when(factory.create(NAME)).thenReturn(dbo);
+			when(repository.save(dbo)).thenReturn(dbo);
+			when(mapper.toModel(dbo)).thenReturn(model);
 			// Run
 			City returned = unitUnderTest.create(NAME);
 			// Check
-			assertEquals(UID, returned.getId());
-		}
-
-		@Test
-		void returnsANewCity_withPassedName() {
-			// Prepare
-			when(uuidService.create()).thenReturn(UID);
-			// Run
-			City returned = unitUnderTest.create(NAME);
-			// Check
-			assertEquals(NAME, returned.getName());
-		}
-
-		@Test
-		void returnsANewCity_onEachCall() {
-			assertNotSame(unitUnderTest.create(NAME), unitUnderTest.create(NAME));
+			assertSame(model, returned);
 		}
 	}
 }
