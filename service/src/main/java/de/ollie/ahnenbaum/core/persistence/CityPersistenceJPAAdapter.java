@@ -40,8 +40,8 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
 	@Override
 	public Optional<City> findById(UUID id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(dbo -> mapper.toModel(dbo));
 	}
 
 	@Override

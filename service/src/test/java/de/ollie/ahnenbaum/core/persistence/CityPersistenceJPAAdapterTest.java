@@ -9,6 +9,8 @@ import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
 import de.ollie.ahnenbaum.core.persistence.factory.CityDBOFactory;
 import de.ollie.ahnenbaum.core.persistence.mapper.CityDBOMapper;
 import de.ollie.ahnenbaum.core.persistence.repository.CityDBORepository;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CityPersistenceJPAAdapterTest {
 
 	private static final String NAME = "name";
+	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
 	private City model;
@@ -62,6 +65,24 @@ class CityPersistenceJPAAdapterTest {
 			City returned = unitUnderTest.create(NAME);
 			// Check
 			assertSame(model, returned);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findById_String {
+
+		@Test
+		void throwsAnException_passingANullPointer() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.findById(null));
+		}
+
+		@Test
+		void returnsTheMappedReturnOfTheRepositoryCall() {
+			// Prepare
+			when(repository.findById(UID)).thenReturn(Optional.of(dbo));
+			when(mapper.toModel(dbo)).thenReturn(model);
+			// Run
+			assertSame(model, unitUnderTest.findById(UID).get());
 		}
 	}
 }

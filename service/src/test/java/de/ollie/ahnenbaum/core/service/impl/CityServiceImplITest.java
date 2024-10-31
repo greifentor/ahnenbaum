@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.ollie.ahnenbaum.core.model.City;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -16,7 +17,7 @@ class CityServiceImplITest {
 	@Inject
 	private CityServiceImpl unitUnderTest;
 
-	// @Test
+	@Test
 	void createsANewCityWithPassedName() {
 		City city = unitUnderTest.create(NAME);
 		assertEquals(NAME, city.getName());
