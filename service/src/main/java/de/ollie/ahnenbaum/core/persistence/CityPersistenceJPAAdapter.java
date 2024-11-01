@@ -11,6 +11,7 @@ import de.ollie.ahnenbaum.core.service.UUIDService;
 import de.ollie.ahnenbaum.core.service.port.CityPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,20 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
 	@Override
 	public void changeName(UUID id, String name) {
-		// TODO Auto-generated method stub
-
+		ensure(id != null, "id cannot be null!");
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		repository
+			.findById(id)
+			.ifPresentOrElse(
+				dbo -> {
+					dbo.setName(name);
+					repository.save(dbo);
+				},
+				() -> {
+					throw new NoSuchElementException();
+				}
+			);
 	}
 
 	@Override

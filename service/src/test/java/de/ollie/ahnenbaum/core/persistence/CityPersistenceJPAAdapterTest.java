@@ -2,6 +2,9 @@ package de.ollie.ahnenbaum.core.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import de.ollie.ahnenbaum.core.model.City;
@@ -9,6 +12,7 @@ import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
 import de.ollie.ahnenbaum.core.persistence.factory.CityDBOFactory;
 import de.ollie.ahnenbaum.core.persistence.mapper.CityDBOMapper;
 import de.ollie.ahnenbaum.core.persistence.repository.CityDBORepository;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -65,6 +69,55 @@ class CityPersistenceJPAAdapterTest {
 			City returned = unitUnderTest.create(NAME);
 			// Check
 			assertSame(model, returned);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_changeName_String {
+
+		@Test
+		void throwsAnException_passingANullValueAsId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.changeName(null, NAME));
+		}
+
+		@Test
+		void throwsAnException_passingANullValueAsName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.changeName(UID, null));
+		}
+
+		@Test
+		void throwsAnException_passingAnEmptyStringAsName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.changeName(UID, ""));
+		}
+
+		@Test
+		void callsThePersistentPortUpdate() {
+			// Prepare
+			when(repository.findById(UID)).thenReturn(Optional.of(dbo));
+			// Run
+			unitUnderTest.changeName(UID, NAME);
+			// Check
+			verify(repository, times(1)).save(dbo);
+		}
+
+		@Test
+		void callsTheDbosSetNameMethod() {
+			// Prepare
+			when(repository.findById(UID)).thenReturn(Optional.of(dbo));
+			// Run
+			unitUnderTest.changeName(UID, NAME);
+			// Check
+			verify(dbo, times(1)).setName(NAME);
+		}
+
+		@Test
+		void throwsAnException_whenThereIsNoDboForThePassedId() {
+			// Prepare
+			when(repository.findById(UID)).thenReturn(Optional.empty());
+			// Run
+			assertThrows(NoSuchElementException.class, () -> unitUnderTest.changeName(UID, NAME));
+			// Check
+			verifyNoInteractions(dbo);
 		}
 	}
 
