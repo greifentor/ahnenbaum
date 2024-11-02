@@ -48,8 +48,8 @@ class CityServiceImplTest {
 		}
 
 		@Test
-		void throwsAnException_passingAnEmptyStringAsName() {
-			assertThrows(ServiceException.class, () -> unitUnderTest.changeName(UID, ""));
+		void throwsAnException_passingABlankStringAsName() {
+			assertThrows(ServiceException.class, () -> unitUnderTest.changeName(UID, "\t\n\r "));
 		}
 
 		@Test

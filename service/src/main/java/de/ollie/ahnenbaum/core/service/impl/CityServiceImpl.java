@@ -16,13 +16,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class CityServiceImpl implements CityService {
 
+	private static final String MESSAGE_ID_CANNOT_BE_NULL = "id cannot be null!";
+	private static final String MESSAGE_NAME_CANNOT_BE_NULL = "name cannot be null!";
+	private static final String MESSAGE_NAME_CANNOT_BE_EMPTY = "name cannot be blank!";
+
 	private final CityPersistencePort persistencePort;
 
 	@Override
 	public void changeName(UUID id, String name) {
-		ensure(id != null, new ServiceException("id cannot be null", null, ""));
-		ensure(name != null, new ServiceException("name cannot be null", null, ""));
-		ensure(!name.isEmpty(), new ServiceException("name cannot be empty", null, ""));
+		ensure(id != null, new ServiceException(MESSAGE_ID_CANNOT_BE_NULL, null, ""));
+		ensure(name != null, new ServiceException(MESSAGE_NAME_CANNOT_BE_NULL, null, ""));
+		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
 		persistencePort
 			.findById(id)
 			.ifPresentOrElse(
@@ -35,20 +39,20 @@ class CityServiceImpl implements CityService {
 
 	@Override
 	public City create(String name) {
-		ensure(name != null, new ServiceException("name cannot be null", null, ""));
-		ensure(!name.isEmpty(), new ServiceException("name cannot be empty", null, ""));
+		ensure(name != null, new ServiceException(MESSAGE_NAME_CANNOT_BE_NULL, null, ""));
+		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
 		return persistencePort.create(name);
 	}
 
 	@Override
 	public void deleteById(UUID id) {
-		ensure(id != null, new ServiceException("id cannot be null", null, ""));
+		ensure(id != null, new ServiceException(MESSAGE_ID_CANNOT_BE_NULL, null, ""));
 		persistencePort.deleteById(id);
 	}
 
 	@Override
 	public Optional<City> findById(UUID id) {
-		ensure(id != null, new ServiceException("id cannot be null", null, ""));
+		ensure(id != null, new ServiceException(MESSAGE_ID_CANNOT_BE_NULL, null, ""));
 		return persistencePort.findById(id);
 	}
 

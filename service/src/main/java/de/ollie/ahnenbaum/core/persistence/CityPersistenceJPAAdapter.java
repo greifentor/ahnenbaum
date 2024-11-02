@@ -19,15 +19,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
+	private static final String MESSAGE_ID_CANNOT_BE_NULL = "id cannot be null!";
+	private static final String MESSAGE_NAME_CANNOT_BE_NULL = "name cannot be null!";
+	private static final String MESSAGE_NAME_CANNOT_BE_EMPTY = "name cannot be blank!";
 	private final CityDBOFactory factory;
 	private final CityDBOMapper mapper;
 	private final CityDBORepository repository;
 
 	@Override
 	public void changeName(UUID id, String name) {
-		ensure(id != null, "id cannot be null!");
-		ensure(name != null, "name cannot be null!");
-		ensure(!name.isBlank(), "name cannot be blank!");
+		ensure(id != null, MESSAGE_ID_CANNOT_BE_NULL);
+		ensure(name != null, MESSAGE_NAME_CANNOT_BE_NULL);
+		ensure(!name.isBlank(), MESSAGE_NAME_CANNOT_BE_EMPTY);
 		repository
 			.findById(id)
 			.ifPresentOrElse(
@@ -43,15 +46,15 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
 	@Override
 	public City create(String name) {
-		ensure(name != null, "name cannot be null!");
-		ensure(!name.isBlank(), "name cannot be blank!");
+		ensure(name != null, MESSAGE_NAME_CANNOT_BE_NULL);
+		ensure(!name.isBlank(), MESSAGE_NAME_CANNOT_BE_EMPTY);
 		CityDBO city = factory.create(name);
 		return mapper.toModel(repository.save(city));
 	}
 
 	@Override
 	public void deleteById(UUID id) {
-		ensure(id != null, "id cannot be null!");
+		ensure(id != null, MESSAGE_ID_CANNOT_BE_NULL);
 		repository.deleteById(id);
 	}
 
@@ -62,7 +65,7 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
 	@Override
 	public Optional<City> findById(UUID id) {
-		ensure(id != null, "id cannot be null!");
-		return repository.findById(id).map(dbo -> mapper.toModel(dbo));
+		ensure(id != null, MESSAGE_ID_CANNOT_BE_NULL);
+		return repository.findById(id).map(mapper::toModel);
 	}
 }
