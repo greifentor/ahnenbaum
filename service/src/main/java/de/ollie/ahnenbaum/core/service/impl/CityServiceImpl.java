@@ -8,7 +8,6 @@ import de.ollie.ahnenbaum.core.service.CityService;
 import de.ollie.ahnenbaum.core.service.port.CityPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ class CityServiceImpl implements CityService {
 			.ifPresentOrElse(
 				city -> persistencePort.changeName(id, name),
 				() -> {
-					throw new NoSuchElementException("there is no city with id: " + id);
+					throw new ServiceException("there is no city", null, "id", id.toString());
 				}
 			);
 	}
@@ -39,6 +38,12 @@ class CityServiceImpl implements CityService {
 		ensure(name != null, new ServiceException("name cannot be null", null, ""));
 		ensure(!name.isEmpty(), new ServiceException("name cannot be empty", null, ""));
 		return persistencePort.create(name);
+	}
+
+	@Override
+	public void deleteById(UUID id) {
+		ensure(id != null, new ServiceException("id cannot be null", null, ""));
+		persistencePort.deleteById(id);
 	}
 
 	@Override

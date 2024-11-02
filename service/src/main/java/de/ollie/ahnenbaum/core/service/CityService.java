@@ -10,6 +10,8 @@ public interface CityService {
 
 	void changeName(UUID id, String name);
 
+	void deleteById(UUID id);
+
 	Optional<City> findById(UUID id);
 
 	List<City> findAll();

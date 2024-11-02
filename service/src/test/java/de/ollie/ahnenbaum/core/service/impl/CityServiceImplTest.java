@@ -53,6 +53,14 @@ class CityServiceImplTest {
 		}
 
 		@Test
+		void throwsAnException_passingAnId_whenNoRecordIsRelatedToPassedId() {
+			// Prepare
+			when(cityPersistencePort.findById(UID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(ServiceException.class, () -> unitUnderTest.changeName(UID, NAME));
+		}
+
+		@Test
 		void changesTheNameByCallingThePersistencePortCorrectly() {
 			// Prepare
 			when(cityPersistencePort.findById(UID)).thenReturn(Optional.of(city));
@@ -84,6 +92,23 @@ class CityServiceImplTest {
 			City returned = unitUnderTest.create(NAME);
 			// Check
 			assertSame(city, returned);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_deleteById_UUID {
+
+		@Test
+		void throwsAnException_passingANullValueAsId() {
+			assertThrows(ServiceException.class, () -> unitUnderTest.deleteById(null));
+		}
+
+		@Test
+		void callsThePersistencePortMethodDeleteByIdCorrectly() {
+			// Run
+			unitUnderTest.deleteById(UID);
+			// Check
+			verify(cityPersistencePort, times(1)).deleteById(UID);
 		}
 	}
 

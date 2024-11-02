@@ -6,11 +6,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CityPersistencePort {
-	City create(String name);
-
 	void changeName(UUID id, String name);
 
-	Optional<City> findById(UUID id);
+	City create(String name);
+
+	void deleteById(UUID uuid);
 
 	List<City> findAll();
+
+	Optional<City> findById(UUID id);
 }

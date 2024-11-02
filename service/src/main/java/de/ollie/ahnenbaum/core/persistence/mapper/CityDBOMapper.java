@@ -4,8 +4,10 @@ import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.core.model.impl.CityModel;
 import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
 import jakarta.inject.Named;
+import lombok.Generated;
 
 @Named
+@Generated
 public class CityDBOMapper {
 
 	public City toModel(CityDBO dbo) {
