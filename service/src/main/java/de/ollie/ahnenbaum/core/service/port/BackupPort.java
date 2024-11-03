@@ -1,7 +1,9 @@
 package de.ollie.ahnenbaum.core.service.port;
 
-public interface BackupPort {
-	void backup(String backupName);
+import de.ollie.ahnenbaum.core.model.BackupParameters;
 
-	void restore(String backupName);
+public interface BackupPort {
+	void backup(BackupParameters backupParameters);
+
+	void restore(BackupParameters backupParameters);
 }
