@@ -5,7 +5,7 @@ import static de.ollie.ahnenbaum.util.Check.ensure;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
 import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.core.service.CityService;
-import de.ollie.ahnenbaum.core.service.port.CityPersistencePort;
+import de.ollie.ahnenbaum.core.service.port.persistence.CityPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;

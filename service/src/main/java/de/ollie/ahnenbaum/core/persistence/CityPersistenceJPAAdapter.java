@@ -7,7 +7,7 @@ import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
 import de.ollie.ahnenbaum.core.persistence.factory.CityDBOFactory;
 import de.ollie.ahnenbaum.core.persistence.mapper.CityDBOMapper;
 import de.ollie.ahnenbaum.core.persistence.repository.CityDBORepository;
-import de.ollie.ahnenbaum.core.service.port.CityPersistencePort;
+import de.ollie.ahnenbaum.core.service.port.persistence.CityPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.NoSuchElementException;

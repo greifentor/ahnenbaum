@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import de.ollie.ahnenbaum.core.exception.ServiceException;
 import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.core.service.port.CityPersistencePort;
+import de.ollie.ahnenbaum.core.service.port.persistence.CityPersistencePort;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

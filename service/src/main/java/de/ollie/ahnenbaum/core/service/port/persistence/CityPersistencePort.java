@@ -1,4 +1,4 @@
-package de.ollie.ahnenbaum.core.service.port;
+package de.ollie.ahnenbaum.core.service.port.persistence;
 
 import de.ollie.ahnenbaum.core.model.City;
 import java.util.List;
