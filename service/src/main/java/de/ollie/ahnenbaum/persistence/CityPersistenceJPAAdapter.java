@@ -1,13 +1,13 @@
-package de.ollie.ahnenbaum.core.persistence;
+package de.ollie.ahnenbaum.persistence;
 
 import static de.ollie.ahnenbaum.util.Check.ensure;
 
 import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
-import de.ollie.ahnenbaum.core.persistence.factory.CityDBOFactory;
-import de.ollie.ahnenbaum.core.persistence.mapper.CityDBOMapper;
-import de.ollie.ahnenbaum.core.persistence.repository.CityDBORepository;
 import de.ollie.ahnenbaum.core.service.port.persistence.CityPersistencePort;
+import de.ollie.ahnenbaum.persistence.entity.CityDBO;
+import de.ollie.ahnenbaum.persistence.factory.CityDBOFactory;
+import de.ollie.ahnenbaum.persistence.mapper.CityDBOMapper;
+import de.ollie.ahnenbaum.persistence.repository.CityDBORepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.NoSuchElementException;

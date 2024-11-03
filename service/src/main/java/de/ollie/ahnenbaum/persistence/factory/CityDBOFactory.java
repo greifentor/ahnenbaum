@@ -1,7 +1,7 @@
-package de.ollie.ahnenbaum.core.persistence.factory;
+package de.ollie.ahnenbaum.persistence.factory;
 
-import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
 import de.ollie.ahnenbaum.core.service.UUIDService;
+import de.ollie.ahnenbaum.persistence.entity.CityDBO;
 import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;
 

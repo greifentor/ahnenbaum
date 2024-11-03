@@ -1,4 +1,4 @@
-package de.ollie.ahnenbaum.core.persistence.factory;
+package de.ollie.ahnenbaum.persistence.factory;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import de.ollie.ahnenbaum.core.service.UUIDService;
 import de.ollie.ahnenbaum.core.service.impl.UUIDServiceImpl;
+import de.ollie.ahnenbaum.persistence.factory.CityDBOFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

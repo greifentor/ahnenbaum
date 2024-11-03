@@ -1,8 +1,8 @@
-package de.ollie.ahnenbaum.core.persistence.mapper;
+package de.ollie.ahnenbaum.persistence.mapper;
 
 import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.core.model.impl.CityModel;
-import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
+import de.ollie.ahnenbaum.persistence.entity.CityDBO;
 import jakarta.inject.Named;
 import lombok.Generated;
 

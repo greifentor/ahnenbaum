@@ -1,6 +1,6 @@
-package de.ollie.ahnenbaum.core.persistence.repository;
+package de.ollie.ahnenbaum.persistence.repository;
 
-import de.ollie.ahnenbaum.core.persistence.entity.CityDBO;
+import de.ollie.ahnenbaum.persistence.entity.CityDBO;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 

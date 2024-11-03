@@ -1,4 +1,4 @@
-package de.ollie.ahnenbaum.core.persistence.entity;
+package de.ollie.ahnenbaum.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
