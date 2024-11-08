@@ -37,6 +37,7 @@
 	</build>
 	<modules>
 		<module>service</module>
+		<module>shell</module>
 	</modules>
 	<dependencies>
 		<dependency>
