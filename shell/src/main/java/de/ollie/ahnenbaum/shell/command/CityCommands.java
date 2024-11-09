@@ -7,6 +7,7 @@ import org.springframework.shell.standard.ShellOption;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
 import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.core.service.CityService;
+import de.ollie.ahnenbaum.shell.ExceptionToStringMapper;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -20,13 +21,14 @@ public class CityCommands {
 	static final String MESSAGE_NAME_ALREADY_EXISTING = "City with passed name is already existing!";
 
 	private final CityService cityService;
+	private final ExceptionToStringMapper exceptionToStringMapper;
 
 	@ShellMethod(value = "Adds a new city.", key = { "add-city", "ac" })
 	public String add(@ShellOption(help = "Name of the city.", value = "name") String name) {
 		try {
 			return cityService.create(name).toString();
 		} catch (ServiceException e) {
-			return e.getMessage();
+			return exceptionToStringMapper.map(e);
 		}
 	}
 

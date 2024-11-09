@@ -26,7 +26,10 @@ public class FileBackupAdapter implements BackupPort {
 			backupParameters.findParameter(BackupFileWriter.FILE_NAME_PARAMETER).isPresent(),
 			new IllegalStateException(BackupFileWriter.FILE_NAME_PARAMETER + " must be set in backup parameters!")
 		);
-		String fileName = backupParameters.findParameter(BackupFileWriter.FILE_NAME_PARAMETER).get().toString();
+		String fileName = backupParameters
+			.findParameter(BackupFileWriter.FILE_NAME_PARAMETER)
+			.map(Object::toString)
+			.orElse("");
 		try {
 			backupFileWriter.write(fileName, databaseToJsonMapper.map());
 		} catch (IOException ioe) {

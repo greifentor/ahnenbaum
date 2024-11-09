@@ -22,18 +22,19 @@ import de.ollie.ahnenbaum.shell.ExceptionToStringMapper;
 class CityCommandsTest {
 
 	private static final String NAME = "name";
+	private static final String MAPPED_EXCEPTION_MESSAGE = "mapped-exception-message";
 
 	@Mock
 	private CityService cityService;
 
 	@Mock
-	private ExceptionToStringMapper serviceExceptionToStringMapper;
+	private ExceptionToStringMapper exceptionToStringMapper;
 
 	@InjectMocks
 	private CityCommands unitUnderTest;
 
 	private City createCity(String name) {
-		return new CityModel().setName(NAME);
+		return new CityModel().setName(name);
 	}
 
 	@Nested
@@ -54,11 +55,10 @@ class CityCommandsTest {
 		@Test
 		void returnsTheCorrectString_whenCityCanNotBeCreated_byAlreadyExistingName() {
 			// Prepare
-			createCity(NAME);
-			createCity(NAME);
-			String expected = CityCommands.MESSAGE_NAME_ALREADY_EXISTING;
-			when(cityService.create(NAME))
-					.thenThrow(new ServiceException(CityCommands.MESSAGE_NAME_ALREADY_EXISTING, null, ""));
+			String expected = MAPPED_EXCEPTION_MESSAGE;
+			ServiceException thrown = new ServiceException(CityCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
+			when(cityService.create(NAME)).thenThrow(thrown);
+			when(exceptionToStringMapper.map(thrown)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.add(NAME);
 			// Check
