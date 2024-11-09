@@ -9,8 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.persistence.CityPersistenceJPAAdapter;
 import de.ollie.ahnenbaum.persistence.entity.CityDBO;
 import de.ollie.ahnenbaum.persistence.factory.CityDBOFactory;
 import de.ollie.ahnenbaum.persistence.mapper.CityDBOMapper;
@@ -119,9 +119,18 @@ class CityPersistenceJPAAdapterTest {
 		}
 
 		@Test
+		void throwsAnException_passingAnAlreadyStoredNameAGain() {
+			// Prepare
+			when(repository.findByName(NAME)).thenReturn(Optional.of(dbo0));
+			// Run & Check
+			assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.create(NAME));
+		}
+
+		@Test
 		void returnsANewCity() {
 			// Prepare
 			when(factory.create(NAME)).thenReturn(dbo0);
+			when(repository.findByName(NAME)).thenReturn(Optional.empty());
 			when(repository.save(dbo0)).thenReturn(dbo0);
 			when(mapper.toModel(dbo0)).thenReturn(model0);
 			// Run

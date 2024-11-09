@@ -2,8 +2,9 @@ package de.ollie.ahnenbaum.core.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,12 +39,20 @@ class ServiceExceptionTest {
 
 		@Test
 		void setsTheMessageDataCorrectly() {
-			assertEquals(List.of(MESSAGE_DATA_0, MESSAGE_DATA_1), unitUnderTest.getMessageData());
+			assertEquals(Map.of(MESSAGE_DATA_0, MESSAGE_DATA_1), unitUnderTest.getMessageData());
 		}
 
 		@Test
 		void setsTheMessageIdCorrectly() {
 			assertEquals(MESSAGE_ID, unitUnderTest.getMessageId());
+		}
+
+		@Test
+		void throwsAnException_passingAnOddNumberOfMessageData() {
+			assertThrows(
+				IllegalStateException.class,
+				() -> new ServiceException(MESSAGE, THROWABLE, MESSAGE_ID, MESSAGE_DATA_0)
+			);
 		}
 	}
 }

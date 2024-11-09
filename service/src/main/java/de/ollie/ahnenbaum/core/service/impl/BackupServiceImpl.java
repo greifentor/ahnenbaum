@@ -18,12 +18,7 @@ public class BackupServiceImpl implements BackupService {
 		try {
 			backupPort.backup(backupParameters);
 		} catch (Exception e) {
-			throw new ServiceException(
-				"something went wrong while backup",
-				e,
-				"ServiceException.backup.label",
-				e.getMessage()
-			);
+			throw new ServiceException("something went wrong while backup", e, "ServiceException.backup.label");
 		}
 	}
 
@@ -32,12 +27,7 @@ public class BackupServiceImpl implements BackupService {
 		try {
 			backupPort.restore(backupParameters);
 		} catch (Exception e) {
-			throw new ServiceException(
-				"something went wrong while restore",
-				e,
-				"ServiceException.restore.label",
-				e.getMessage()
-			);
+			throw new ServiceException("something went wrong while restore", e, "ServiceException.restore.label");
 		}
 	}
 }

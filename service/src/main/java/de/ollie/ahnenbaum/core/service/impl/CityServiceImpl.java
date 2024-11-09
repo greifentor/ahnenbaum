@@ -32,7 +32,15 @@ class CityServiceImpl implements CityService {
 			.ifPresentOrElse(
 				city -> persistencePort.changeName(id, name),
 				() -> {
-					throw new ServiceException("there is no city", null, "id", id.toString());
+					throw new ServiceException(
+						"there is no city",
+						null,
+						"no-such-element-exception",
+						"entityName",
+						"City",
+						"id",
+						id.toString()
+					);
 				}
 			);
 	}

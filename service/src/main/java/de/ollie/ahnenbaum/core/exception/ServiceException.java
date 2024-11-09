@@ -1,20 +1,28 @@
 package de.ollie.ahnenbaum.core.exception;
 
-import java.util.ArrayList;
-import java.util.List;
+import static de.ollie.ahnenbaum.util.Check.ensure;
+
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 
 @Getter
 public class ServiceException extends RuntimeException {
 
-	private String messageId;
-	private List<String> messageData = new ArrayList<>();
+	private final String messageId;
+	private final Map<String, String> messageData = new HashMap<>();
 
 	public ServiceException(String message, Throwable cause, String messageId, String... messageData) {
 		super(message, cause);
+		ensure(
+			messageData.length % 2 == 0,
+			new IllegalStateException(
+				"exception requires an even number of message data: " + messageData.length + " arguments"
+			)
+		);
 		this.messageId = messageId;
-		for (String md : messageData) {
-			this.messageData.add(md);
+		for (int i = 0; i < messageData.length; i = i + 2) {
+			this.messageData.put(messageData[i], messageData[i + 1]);
 		}
 	}
 }

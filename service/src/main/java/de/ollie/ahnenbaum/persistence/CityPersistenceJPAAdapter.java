@@ -2,6 +2,7 @@ package de.ollie.ahnenbaum.persistence;
 
 import static de.ollie.ahnenbaum.util.Check.ensure;
 
+import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.core.service.port.persistence.CityPersistencePort;
 import de.ollie.ahnenbaum.persistence.entity.CityDBO;
@@ -48,6 +49,7 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 	public City create(String name) {
 		ensure(name != null, MESSAGE_NAME_CANNOT_BE_NULL);
 		ensure(!name.isBlank(), MESSAGE_NAME_CANNOT_BE_EMPTY);
+		ensure(repository.findByName(name).isEmpty(), new UniqueConstraintViolationException("City", "name"));
 		CityDBO city = factory.create(name);
 		return mapper.toModel(repository.save(city));
 	}
