@@ -44,7 +44,7 @@ class ExceptionToStringMapperTest {
 		void returnsADefaultString_passingAnExceptionWithNoMessageNoCauseNoMessageIdAndNoMessageData() {
 			// Prepare
 			String expected = ExceptionToStringMapper.DEFAULT_MESSAGE
-					.replace(ExceptionToStringMapper.CLASS_NAME_WILDCARD, ServiceException.class.getSimpleName());
+					.replace(ExceptionToStringMapper.ENTITY_NAME_WILDCARD, ServiceException.class.getSimpleName());
 			// Run & Check
 			assertEquals(expected, unitUnderTest.map(new ServiceException(null, null, null)));
 		}
@@ -66,7 +66,9 @@ class ExceptionToStringMapperTest {
 		@Test
 		void returnsAStringWithTheExceptionMessage_passingAnExceptionWithAMessageACauseWithMessageAMessageIdAndNoMessageData_butMessageIdHasNoResource() {
 			// Prepare
-			when(resourceService.getResourceById(MESSAGE_ID, Localization.DE)).thenReturn(null);
+			String messageId = ExceptionToStringMapper.RESOURCE_NAME
+					.replace(ExceptionToStringMapper.MESSAGE_ID_WILDCARD, MESSAGE_ID);
+			when(resourceService.getResourceById(messageId, Localization.EN)).thenReturn(null);
 			// Run & Check
 			assertEquals(MESSAGE, unitUnderTest
 					.map(new ServiceException(MESSAGE, new RuntimeException("cause-message"), MESSAGE_ID)));
@@ -75,7 +77,9 @@ class ExceptionToStringMapperTest {
 		@Test
 		void returnsAStringWithTheExceptionMessage_passingAnExceptionWithAMessageACauseWithMessageAMessageIdAndNoMessage_messageIdHasAResource() {
 			// Prepare
-			when(resourceService.getResourceById(MESSAGE_ID, Localization.DE)).thenReturn(MESSAGE_RESOURCE);
+			String messageId = ExceptionToStringMapper.RESOURCE_NAME
+					.replace(ExceptionToStringMapper.MESSAGE_ID_WILDCARD, MESSAGE_ID);
+			when(resourceService.getResourceById(messageId, Localization.EN)).thenReturn(MESSAGE_RESOURCE);
 			// Run & Check
 			assertEquals(MESSAGE_RESOURCE, unitUnderTest
 					.map(new ServiceException(MESSAGE, new RuntimeException("cause-message"), MESSAGE_ID)));
@@ -84,8 +88,10 @@ class ExceptionToStringMapperTest {
 		@Test
 		void returnsAStringWithTheExceptionMessageAndReplacedWildcards_passingAnExceptionWithAMessageACauseWithMessageAMessageIdAndMessageData() {
 			// Prepare
-			when(resourceService.getResourceById(MESSAGE_ID, Localization.DE))
-					.thenReturn(WILDCARD_0 + MESSAGE_RESOURCE + WILDCARD_1);
+			String messageId = ExceptionToStringMapper.RESOURCE_NAME
+					.replace(ExceptionToStringMapper.MESSAGE_ID_WILDCARD, MESSAGE_ID);
+			when(resourceService.getResourceById(messageId, Localization.EN))
+					.thenReturn("{" + WILDCARD_0 + "}" + MESSAGE_RESOURCE + "{" + WILDCARD_1 + "}");
 			// Run & Check
 			assertEquals(VALUE_0 + MESSAGE_RESOURCE + VALUE_1, unitUnderTest.map(new ServiceException(MESSAGE,
 					new RuntimeException("cause-message"), MESSAGE_ID, WILDCARD_0, VALUE_0, WILDCARD_1, VALUE_1)));

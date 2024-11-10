@@ -49,7 +49,7 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 	public City create(String name) {
 		ensure(name != null, MESSAGE_NAME_CANNOT_BE_NULL);
 		ensure(!name.isBlank(), MESSAGE_NAME_CANNOT_BE_EMPTY);
-		ensure(repository.findByName(name).isEmpty(), new UniqueConstraintViolationException("City", "name"));
+		ensure(repository.findByName(name).isEmpty(), new UniqueConstraintViolationException(name, "City", "name"));
 		CityDBO city = factory.create(name);
 		return mapper.toModel(repository.save(city));
 	}

@@ -14,17 +14,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ExceptionToStringMapper {
 
-	static final String CLASS_NAME_WILDCARD = "{className}";
-	static final String DEFAULT_MESSAGE = CLASS_NAME_WILDCARD + " thrown with unknown reason!";
+	static final String ENTITY_NAME_WILDCARD = "{entityName}";
+	static final String DEFAULT_MESSAGE = ENTITY_NAME_WILDCARD + " thrown with unknown reason!";
+	static final String MESSAGE_ID_WILDCARD = "{message-id}";
+	static final String RESOURCE_NAME = "exception." + MESSAGE_ID_WILDCARD + ".label";
 
 	private final ResourcePort resourceService;
 
 	public String map(ServiceException exception) {
 		ensure(exception != null, "exception cannot be null!");
-		String resource = resourceService.getResourceById(exception.getMessageId(), Localization.DE);
+		String resource = resourceService.getResourceById(
+				RESOURCE_NAME.replace(MESSAGE_ID_WILDCARD, "" + exception.getMessageId()), Localization.EN);
 		if ((exception.getMessageId() != null) && (resource != null)) {
 			for (Entry<String, String> e : exception.getMessageData().entrySet()) {
-				resource = resource.replace(e.getKey(), e.getValue());
+				resource = resource.replace("{" + e.getKey() + "}", e.getValue());
 			}
 			return resource;
 		}
@@ -33,7 +36,7 @@ public class ExceptionToStringMapper {
 		} else if (exception.getCause() != null) {
 			return exception.getCause().getMessage();
 		}
-		return DEFAULT_MESSAGE.replace(CLASS_NAME_WILDCARD, exception.getClass().getSimpleName());
+		return DEFAULT_MESSAGE.replace(ENTITY_NAME_WILDCARD, exception.getClass().getSimpleName());
 	}
 
 }
