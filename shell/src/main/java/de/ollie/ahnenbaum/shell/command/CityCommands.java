@@ -1,5 +1,7 @@
 package de.ollie.ahnenbaum.shell.command;
 
+import java.util.UUID;
+
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -17,8 +19,9 @@ import lombok.RequiredArgsConstructor;
 @ShellComponent
 public class CityCommands {
 
-	static final String MESSAGE_NO_DATA = "No cities stored!";
 	static final String MESSAGE_NAME_ALREADY_EXISTING = "City with passed name is already existing!";
+	static final String MESSAGE_NO_CITY_WITH_ID = "No city stored with id: {id}";
+	static final String MESSAGE_NO_DATA = "No cities stored!";
 
 	private final CityService cityService;
 	private final ExceptionToStringMapper exceptionToStringMapper;
@@ -28,6 +31,16 @@ public class CityCommands {
 		try {
 			return cityService.create(name).toString();
 		} catch (ServiceException e) {
+			return exceptionToStringMapper.map(e);
+		}
+	}
+
+	@ShellMethod(value = "Finds a city by id.", key = { "find-city", "fc" })
+	public String findById(@ShellOption(help = "Id of the city.", value = "id") String id) {
+		try {
+			return cityService.findById(UUID.fromString(id)).map(City::toString)
+					.orElse(MESSAGE_NO_CITY_WITH_ID.replace("{id}", id));
+		} catch (Exception e) {
 			return exceptionToStringMapper.map(e);
 		}
 	}

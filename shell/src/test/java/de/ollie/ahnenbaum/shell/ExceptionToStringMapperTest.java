@@ -97,6 +97,14 @@ class ExceptionToStringMapperTest {
 					new RuntimeException("cause-message"), MESSAGE_ID, WILDCARD_0, VALUE_0, WILDCARD_1, VALUE_1)));
 		}
 
+		@Test
+		void returnsTheMessage_passingANonServiceException() {
+			// Prepare
+			Exception e = new Exception(MESSAGE);
+			// Run & Check
+			assertEquals(e.getClass().getSimpleName() + ": " + MESSAGE, unitUnderTest.map(e));
+		}
+
 	}
 
 }

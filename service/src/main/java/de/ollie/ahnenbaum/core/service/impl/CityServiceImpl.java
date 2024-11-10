@@ -27,22 +27,7 @@ class CityServiceImpl implements CityService {
 		ensure(id != null, new ServiceException(MESSAGE_ID_CANNOT_BE_NULL, null, ""));
 		ensure(name != null, new ServiceException(MESSAGE_NAME_CANNOT_BE_NULL, null, ""));
 		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
-		persistencePort
-			.findById(id)
-			.ifPresentOrElse(
-				city -> persistencePort.changeName(id, name),
-				() -> {
-					throw new ServiceException(
-						"there is no city",
-						null,
-						"no-such-element-exception",
-						"entityName",
-						"City",
-						"id",
-						id.toString()
-					);
-				}
-			);
+		persistencePort.findById(id).ifPresent(city -> persistencePort.changeName(id, name));
 	}
 
 	@Override

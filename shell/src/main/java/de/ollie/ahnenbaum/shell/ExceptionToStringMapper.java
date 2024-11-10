@@ -21,12 +21,16 @@ public class ExceptionToStringMapper {
 
 	private final ResourcePort resourceService;
 
-	public String map(ServiceException exception) {
+	public String map(Exception exception) {
 		ensure(exception != null, "exception cannot be null!");
+		if (!(exception instanceof ServiceException)) {
+			return exception.getClass().getSimpleName() + ": " + exception.getMessage();
+		}
+		ServiceException serviceException = (ServiceException) exception;
 		String resource = resourceService.getResourceById(
-				RESOURCE_NAME.replace(MESSAGE_ID_WILDCARD, "" + exception.getMessageId()), Localization.EN);
-		if ((exception.getMessageId() != null) && (resource != null)) {
-			for (Entry<String, String> e : exception.getMessageData().entrySet()) {
+				RESOURCE_NAME.replace(MESSAGE_ID_WILDCARD, "" + serviceException.getMessageId()), Localization.EN);
+		if ((serviceException.getMessageId() != null) && (resource != null)) {
+			for (Entry<String, String> e : serviceException.getMessageData().entrySet()) {
 				resource = resource.replace("{" + e.getKey() + "}", e.getValue());
 			}
 			return resource;

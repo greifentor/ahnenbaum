@@ -53,11 +53,13 @@ class CityServiceImplTest {
 		}
 
 		@Test
-		void throwsAnException_passingAnId_whenNoRecordIsRelatedToPassedId() {
+		void throwsAnException_whenPersistencePortThrowsAnException() {
 			// Prepare
-			when(cityPersistencePort.findById(UID)).thenReturn(Optional.empty());
+			RuntimeException e = new RuntimeException();
+			when(cityPersistencePort.findById(UID)).thenThrow(e);
 			// Run & Check
-			assertThrows(ServiceException.class, () -> unitUnderTest.changeName(UID, NAME));
+			Exception thrown = assertThrows(RuntimeException.class, () -> unitUnderTest.changeName(UID, NAME));
+			assertSame(thrown, e);
 		}
 
 		@Test
