@@ -1,5 +1,6 @@
 package de.ollie.ahnenbaum.core.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
@@ -56,7 +57,7 @@ class CityServiceImplTest {
 		void throwsAnException_whenPersistencePortThrowsAnException() {
 			// Prepare
 			RuntimeException e = new RuntimeException();
-			when(cityPersistencePort.findById(UID)).thenThrow(e);
+			when(cityPersistencePort.changeName(UID, NAME)).thenThrow(e);
 			// Run & Check
 			Exception thrown = assertThrows(RuntimeException.class, () -> unitUnderTest.changeName(UID, NAME));
 			assertSame(thrown, e);
@@ -65,11 +66,11 @@ class CityServiceImplTest {
 		@Test
 		void changesTheNameByCallingThePersistencePortCorrectly() {
 			// Prepare
-			when(cityPersistencePort.findById(UID)).thenReturn(Optional.of(city));
+			when(cityPersistencePort.changeName(UID, NAME)).thenReturn(city);
 			// Run
-			unitUnderTest.changeName(UID, NAME);
+			City returned = unitUnderTest.changeName(UID, NAME);
 			// Check
-			verify(cityPersistencePort, times(1)).changeName(UID, NAME);
+			assertEquals(city, returned);
 		}
 	}
 

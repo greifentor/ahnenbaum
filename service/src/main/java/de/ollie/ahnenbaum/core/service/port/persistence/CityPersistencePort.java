@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CityPersistencePort {
-	void changeName(UUID id, String name);
+	City changeName(UUID id, String name);
 
 	City create(String name);
 

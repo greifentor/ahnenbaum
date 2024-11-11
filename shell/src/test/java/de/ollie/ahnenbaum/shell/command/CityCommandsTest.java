@@ -71,6 +71,35 @@ class CityCommandsTest {
 	}
 
 	@Nested
+	class TestsOfMethod_ChangeName {
+
+		@Test
+		void returnsTheCorrectString_whenCitiesNameHasBeenChanged() {
+			// Prepare
+			City city = createCity(NAME, UID);
+			String expected = city.toString();
+			when(cityService.changeName(UID, NAME)).thenReturn(city);
+			// Run
+			String returned = unitUnderTest.changeName(UID.toString(), NAME);
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void returnsExceptionString_whenSomethingWentWrongWhileChangingTheName() {
+			// Prepare
+			RuntimeException e = new RuntimeException();
+			when(cityService.changeName(UID, NAME)).thenThrow(e);
+			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
+			// Run
+			String returned = unitUnderTest.changeName(UID.toString(), NAME);
+			// Check
+			assertEquals(MAPPED_EXCEPTION_MESSAGE, returned);
+		}
+
+	}
+
+	@Nested
 	class TestsOfMethod_FindCity {
 
 		@Test

@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface CityService {
 	City create(String name);
 
-	void changeName(UUID id, String name);
+	City changeName(UUID id, String name);
 
 	void deleteById(UUID id);
 

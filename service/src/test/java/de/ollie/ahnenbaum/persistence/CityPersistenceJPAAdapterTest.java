@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.persistence.entity.CityDBO;
@@ -16,7 +17,6 @@ import de.ollie.ahnenbaum.persistence.factory.CityDBOFactory;
 import de.ollie.ahnenbaum.persistence.mapper.CityDBOMapper;
 import de.ollie.ahnenbaum.persistence.repository.CityDBORepository;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -75,23 +75,16 @@ class CityPersistenceJPAAdapterTest {
 		}
 
 		@Test
-		void callsThePersistentPortUpdate() {
+		void callsDBOSetNameAndRepositorySave() {
 			// Prepare
+			when(dbo0.setName(NAME)).thenReturn(dbo0);
 			when(repository.findById(UID)).thenReturn(Optional.of(dbo0));
+			when(repository.save(dbo0)).thenReturn(dbo0);
+			when(mapper.toModel(dbo0)).thenReturn(model0);
 			// Run
-			unitUnderTest.changeName(UID, NAME);
+			City returned = unitUnderTest.changeName(UID, NAME);
 			// Check
-			verify(repository, times(1)).save(dbo0);
-		}
-
-		@Test
-		void callsTheDbosSetNameMethod() {
-			// Prepare
-			when(repository.findById(UID)).thenReturn(Optional.of(dbo0));
-			// Run
-			unitUnderTest.changeName(UID, NAME);
-			// Check
-			verify(dbo0, times(1)).setName(NAME);
+			assertEquals(model0, returned);
 		}
 
 		@Test
@@ -99,7 +92,7 @@ class CityPersistenceJPAAdapterTest {
 			// Prepare
 			when(repository.findById(UID)).thenReturn(Optional.empty());
 			// Run
-			assertThrows(NoSuchElementException.class, () -> unitUnderTest.changeName(UID, NAME));
+			assertThrows(NoSuchRecordException.class, () -> unitUnderTest.changeName(UID, NAME));
 			// Check
 			verifyNoInteractions(dbo0);
 		}

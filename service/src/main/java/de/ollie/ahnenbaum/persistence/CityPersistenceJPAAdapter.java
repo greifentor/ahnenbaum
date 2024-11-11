@@ -2,6 +2,7 @@ package de.ollie.ahnenbaum.persistence;
 
 import static de.ollie.ahnenbaum.util.Check.ensure;
 
+import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.core.service.port.persistence.CityPersistencePort;
@@ -11,7 +12,6 @@ import de.ollie.ahnenbaum.persistence.mapper.CityDBOMapper;
 import de.ollie.ahnenbaum.persistence.repository.CityDBORepository;
 import jakarta.inject.Named;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -28,28 +28,28 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 	private final CityDBORepository repository;
 
 	@Override
-	public void changeName(UUID id, String name) {
+	public City changeName(UUID id, String name) {
 		ensure(id != null, MESSAGE_ID_CANNOT_BE_NULL);
 		ensure(name != null, MESSAGE_NAME_CANNOT_BE_NULL);
 		ensure(!name.isBlank(), MESSAGE_NAME_CANNOT_BE_EMPTY);
-		repository
+		return repository
 			.findById(id)
-			.ifPresentOrElse(
-				dbo -> {
-					dbo.setName(name);
-					repository.save(dbo);
-				},
-				() -> {
-					throw new NoSuchElementException("there is no city with id: " + id);
-				}
-			);
+			.map(dbo -> setName(dbo, name))
+			.orElseThrow(() -> new NoSuchRecordException(id.toString(), City.class.getSimpleName(), "name"));
+	}
+
+	private City setName(CityDBO dbo, String name) {
+		return mapper.toModel(repository.save(dbo.setName(name)));
 	}
 
 	@Override
 	public City create(String name) {
 		ensure(name != null, MESSAGE_NAME_CANNOT_BE_NULL);
 		ensure(!name.isBlank(), MESSAGE_NAME_CANNOT_BE_EMPTY);
-		ensure(repository.findByName(name).isEmpty(), new UniqueConstraintViolationException(name, "City", "name"));
+		ensure(
+			repository.findByName(name).isEmpty(),
+			new UniqueConstraintViolationException(name, City.class.getSimpleName(), "name")
+		);
 		CityDBO city = factory.create(name);
 		return mapper.toModel(repository.save(city));
 	}

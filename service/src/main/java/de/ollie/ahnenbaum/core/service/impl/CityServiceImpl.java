@@ -23,11 +23,11 @@ class CityServiceImpl implements CityService {
 	private final CityPersistencePort persistencePort;
 
 	@Override
-	public void changeName(UUID id, String name) {
+	public City changeName(UUID id, String name) {
 		ensure(id != null, new ServiceException(MESSAGE_ID_CANNOT_BE_NULL, null, ""));
 		ensure(name != null, new ServiceException(MESSAGE_NAME_CANNOT_BE_NULL, null, ""));
 		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
-		persistencePort.findById(id).ifPresent(city -> persistencePort.changeName(id, name));
+		return persistencePort.changeName(id, name);
 	}
 
 	@Override

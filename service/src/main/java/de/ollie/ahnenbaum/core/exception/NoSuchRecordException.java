@@ -3,7 +3,7 @@ package de.ollie.ahnenbaum.core.exception;
 public class NoSuchRecordException extends ServiceException {
 
 	public static final String MESSAGE = "no record with passed id found!";
-	public static final String MESSAGE_ID = "unique-constraint-violated-exception";
+	public static final String MESSAGE_ID = "no-such-record-exception";
 	public static final String PARAMETER_ID_ATTRIBUTE_NAME = "idAttributeName";
 	public static final String PARAMETER_ENTITY_NAME = "entityName";
 	public static final String PARAMETER_VALUE_NAME = "value";
