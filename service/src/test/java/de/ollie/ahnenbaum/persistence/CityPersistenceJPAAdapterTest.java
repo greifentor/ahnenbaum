@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
+import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.persistence.entity.CityDBO;
@@ -61,12 +62,12 @@ class CityPersistenceJPAAdapterTest {
 
 		@Test
 		void throwsAnException_passingANullValueAsId() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.changeName(null, NAME));
+			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.changeName(null, NAME));
 		}
 
 		@Test
 		void throwsAnException_passingANullValueAsName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.changeName(UID, null));
+			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.changeName(UID, null));
 		}
 
 		@Test
@@ -103,7 +104,7 @@ class CityPersistenceJPAAdapterTest {
 
 		@Test
 		void throwsAnException_passingANullValue() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.create(null));
+			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.create(null));
 		}
 
 		@Test
@@ -138,7 +139,7 @@ class CityPersistenceJPAAdapterTest {
 
 		@Test
 		void throwsAnException_passingANullValueAsId() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.deleteById(null));
+			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.deleteById(null));
 		}
 
 		@Test
@@ -177,7 +178,7 @@ class CityPersistenceJPAAdapterTest {
 
 		@Test
 		void throwsAnException_passingANullPointer() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.findById(null));
+			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.findById(null));
 		}
 
 		@Test

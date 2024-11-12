@@ -11,17 +11,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class NoSuchRecordExceptionTest {
+public class ParameterIsNullExceptionTest {
 
 	private static final String ENTITY_NAME = "Entity-Name";
 	private static final String ID_ATTRIBUTE_NAME = "Id-Attribute-Name";
 	private static final String VALUE = "Value";
 
-	private NoSuchRecordException unitUnderTest;
+	private ParameterIsNullException unitUnderTest;
 
 	@BeforeEach
 	void beforeEach() {
-		unitUnderTest = new NoSuchRecordException(VALUE, ENTITY_NAME, ID_ATTRIBUTE_NAME);
+		unitUnderTest = new ParameterIsNullException(VALUE, ENTITY_NAME, ID_ATTRIBUTE_NAME);
 	}
 
 	@Nested
@@ -34,18 +34,18 @@ public class NoSuchRecordExceptionTest {
 
 		@Test
 		void setsTheMessageCorrectly() {
-			assertEquals(NoSuchRecordException.MESSAGE, unitUnderTest.getMessage());
+			assertEquals(ParameterIsNullException.MESSAGE, unitUnderTest.getMessage());
 		}
 
 		@Test
 		void setsTheMessageDataCorrectly_withColumnNames() {
 			assertEquals(
 				Map.of(
-					NoSuchRecordException.PARAMETER_ENTITY_NAME,
+					ParameterIsNullException.PARAMETER_ENTITY_NAME,
 					ENTITY_NAME,
-					NoSuchRecordException.PARAMETER_ID_ATTRIBUTE_NAME,
+					ParameterIsNullException.PARAMETER_ID_ATTRIBUTE_NAME,
 					ID_ATTRIBUTE_NAME,
-					NoSuchRecordException.PARAMETER_VALUE_NAME,
+					ParameterIsNullException.PARAMETER_VALUE_NAME,
 					VALUE
 				),
 				unitUnderTest.getMessageData()
@@ -56,11 +56,11 @@ public class NoSuchRecordExceptionTest {
 		void setsTheMessageDataCorrectly_withOneColumnNameOnly() {
 			assertEquals(
 				Map.of(
-					NoSuchRecordException.PARAMETER_ENTITY_NAME,
+					ParameterIsNullException.PARAMETER_ENTITY_NAME,
 					ENTITY_NAME,
-					NoSuchRecordException.PARAMETER_ID_ATTRIBUTE_NAME,
+					ParameterIsNullException.PARAMETER_ID_ATTRIBUTE_NAME,
 					ID_ATTRIBUTE_NAME,
-					NoSuchRecordException.PARAMETER_VALUE_NAME,
+					ParameterIsNullException.PARAMETER_VALUE_NAME,
 					VALUE
 				),
 				unitUnderTest.getMessageData()
@@ -69,7 +69,7 @@ public class NoSuchRecordExceptionTest {
 
 		@Test
 		void setsTheMessageIdCorrectly() {
-			assertEquals(NoSuchRecordException.MESSAGE_ID, unitUnderTest.getMessageId());
+			assertEquals(ParameterIsNullException.MESSAGE_ID, unitUnderTest.getMessageId());
 		}
 	}
 }
