@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
+import de.ollie.ahnenbaum.core.exception.ParameterIsBlankException;
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.City;
@@ -72,7 +73,7 @@ class CityPersistenceJPAAdapterTest {
 
 		@Test
 		void throwsAnException_passingAnEmptyStringAsName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.changeName(UID, ""));
+			assertThrows(ParameterIsBlankException.class, () -> unitUnderTest.changeName(UID, ""));
 		}
 
 		@Test
@@ -109,7 +110,7 @@ class CityPersistenceJPAAdapterTest {
 
 		@Test
 		void throwsAnException_passingABlankString() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.create("\r\n\t "));
+			assertThrows(ParameterIsBlankException.class, () -> unitUnderTest.create("\r\n\t "));
 		}
 
 		@Test

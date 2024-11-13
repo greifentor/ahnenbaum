@@ -17,36 +17,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class CityServiceImpl implements CityService {
 
-	private static final String MESSAGE_ID_CANNOT_BE_NULL = "id cannot be null!";
-	private static final String MESSAGE_NAME_CANNOT_BE_NULL = "name cannot be null!";
 	private static final String MESSAGE_NAME_CANNOT_BE_EMPTY = "name cannot be blank!";
 
 	private final CityPersistencePort persistencePort;
 
 	@Override
 	public City changeName(UUID id, String name) {
-		ensure(id != null, new ParameterIsNullException(MESSAGE_ID_CANNOT_BE_NULL, City.class.getSimpleName(), "id"));
-		ensure(name != null, new ParameterIsNullException(MESSAGE_NAME_CANNOT_BE_NULL, City.class.getSimpleName(), "name"));
+		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
+		ensure(name != null, new ParameterIsNullException(City.class.getSimpleName(), "name"));
 		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
 		return persistencePort.changeName(id, name);
 	}
 
 	@Override
 	public City create(String name) {
-		ensure(name != null, new ParameterIsNullException(MESSAGE_NAME_CANNOT_BE_NULL, City.class.getSimpleName(), "name"));
+		ensure(name != null, new ParameterIsNullException(City.class.getSimpleName(), "name"));
 		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
 		return persistencePort.create(name);
 	}
 
 	@Override
 	public void deleteById(UUID id) {
-		ensure(id != null, new ParameterIsNullException(MESSAGE_ID_CANNOT_BE_NULL, City.class.getSimpleName(), "id"));
+		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
 		persistencePort.deleteById(id);
 	}
 
 	@Override
 	public Optional<City> findById(UUID id) {
-		ensure(id != null, new ParameterIsNullException(MESSAGE_ID_CANNOT_BE_NULL, City.class.getSimpleName(), "id"));
+		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
 		return persistencePort.findById(id);
 	}
 

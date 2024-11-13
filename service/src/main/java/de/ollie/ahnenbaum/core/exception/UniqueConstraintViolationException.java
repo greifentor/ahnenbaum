@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class UniqueConstraintViolationException extends ServiceException {
 
 	public static final String MESSAGE = "unique constraint violated!";
-	public static final String MESSAGE_ID = "unique-constraint-violated-exception";
+	public static final String MESSAGE_ID = "unique-constraint-violated";
 	public static final String PARAMETER_ATTRIBUTES_NAMES = "attributeNames";
 	public static final String PARAMETER_ENTITY_NAME = "entityName";
 	public static final String PARAMETER_VALUES_NAME = "values";

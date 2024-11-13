@@ -3,6 +3,7 @@ package de.ollie.ahnenbaum.persistence;
 import static de.ollie.ahnenbaum.util.Check.ensure;
 
 import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
+import de.ollie.ahnenbaum.core.exception.ParameterIsBlankException;
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.City;
@@ -29,9 +30,9 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
 	@Override
 	public City changeName(UUID id, String name) {
-		ensure(id != null, new ParameterIsNullException(MESSAGE_NAME_CANNOT_BE_NULL, City.class.getSimpleName(), "id"));
-		ensure(name != null, new ParameterIsNullException(MESSAGE_NAME_CANNOT_BE_NULL, City.class.getSimpleName(), "name"));
-		ensure(!name.isBlank(), MESSAGE_NAME_CANNOT_BE_EMPTY);
+		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
+		ensure(name != null, new ParameterIsNullException(City.class.getSimpleName(), "name"));
+		ensure(!name.isBlank(), new ParameterIsBlankException(City.class.getSimpleName(), "name"));
 		return repository
 			.findById(id)
 			.map(dbo -> setName(dbo, name))
@@ -44,8 +45,8 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
 	@Override
 	public City create(String name) {
-		ensure(name != null, new ParameterIsNullException(MESSAGE_NAME_CANNOT_BE_NULL, City.class.getSimpleName(), "name"));
-		ensure(!name.isBlank(), MESSAGE_NAME_CANNOT_BE_EMPTY);
+		ensure(name != null, new ParameterIsNullException(City.class.getSimpleName(), "name"));
+		ensure(!name.isBlank(), new ParameterIsBlankException(City.class.getSimpleName(), "name"));
 		ensure(
 			repository.findByName(name).isEmpty(),
 			new UniqueConstraintViolationException(name, City.class.getSimpleName(), "name")
@@ -56,7 +57,7 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
 	@Override
 	public void deleteById(UUID id) {
-		ensure(id != null, new ParameterIsNullException(MESSAGE_NAME_CANNOT_BE_NULL, City.class.getSimpleName(), "id"));
+		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
 		repository.deleteById(id);
 	}
 
@@ -67,7 +68,7 @@ public class CityPersistenceJPAAdapter implements CityPersistencePort {
 
 	@Override
 	public Optional<City> findById(UUID id) {
-		ensure(id != null, new ParameterIsNullException(MESSAGE_NAME_CANNOT_BE_NULL, City.class.getSimpleName(), "id"));
+		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
 		return repository.findById(id).map(mapper::toModel);
 	}
 }

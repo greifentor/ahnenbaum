@@ -11,16 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ParameterIsNullExceptionTest {
+public class ParameterIsBlankExceptionTest {
 
 	private static final String ENTITY_NAME = "Entity-Name";
 	private static final String ATTRIBUTE_NAME = "Attribute-Name";
 
-	private ParameterIsNullException unitUnderTest;
+	private ParameterIsBlankException unitUnderTest;
 
 	@BeforeEach
 	void beforeEach() {
-		unitUnderTest = new ParameterIsNullException(ENTITY_NAME, ATTRIBUTE_NAME);
+		unitUnderTest = new ParameterIsBlankException(ENTITY_NAME, ATTRIBUTE_NAME);
 	}
 
 	@Nested
@@ -33,16 +33,16 @@ public class ParameterIsNullExceptionTest {
 
 		@Test
 		void setsTheMessageCorrectly() {
-			assertEquals(ParameterIsNullException.MESSAGE, unitUnderTest.getMessage());
+			assertEquals(ParameterIsBlankException.MESSAGE, unitUnderTest.getMessage());
 		}
 
 		@Test
 		void setsTheMessageDataCorrectly_withColumnNames() {
 			assertEquals(
 				Map.of(
-					ParameterIsNullException.PARAMETER_ENTITY_NAME,
+					ParameterIsBlankException.PARAMETER_ENTITY_NAME,
 					ENTITY_NAME,
-					ParameterIsNullException.PARAMETER_ATTRIBUTE_NAME,
+					ParameterIsBlankException.PARAMETER_ATTRIBUTE_NAME,
 					ATTRIBUTE_NAME
 				),
 				unitUnderTest.getMessageData()
@@ -53,9 +53,9 @@ public class ParameterIsNullExceptionTest {
 		void setsTheMessageDataCorrectly_withOneColumnNameOnly() {
 			assertEquals(
 				Map.of(
-					ParameterIsNullException.PARAMETER_ENTITY_NAME,
+					ParameterIsBlankException.PARAMETER_ENTITY_NAME,
 					ENTITY_NAME,
-					ParameterIsNullException.PARAMETER_ATTRIBUTE_NAME,
+					ParameterIsBlankException.PARAMETER_ATTRIBUTE_NAME,
 					ATTRIBUTE_NAME
 				),
 				unitUnderTest.getMessageData()
@@ -64,7 +64,7 @@ public class ParameterIsNullExceptionTest {
 
 		@Test
 		void setsTheMessageIdCorrectly() {
-			assertEquals(ParameterIsNullException.MESSAGE_ID, unitUnderTest.getMessageId());
+			assertEquals(ParameterIsBlankException.MESSAGE_ID, unitUnderTest.getMessageId());
 		}
 	}
 }
