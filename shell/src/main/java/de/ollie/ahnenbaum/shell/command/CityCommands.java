@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @ShellComponent
 public class CityCommands {
 
+	static final String MESSAGE_CITY_DELETED = "City with id '{id}' is deleted!";
 	static final String MESSAGE_NAME_ALREADY_EXISTING = "City with passed name is already existing!";
 	static final String MESSAGE_NO_CITY_WITH_ID = "No city stored with id: {id}";
 	static final String MESSAGE_NO_DATA = "No cities stored!";
@@ -44,6 +45,16 @@ public class CityCommands {
 		}
 	}
 
+	@ShellMethod(value = "Deletes a city.", key = { "delete-city", "dc" })
+	public String delete(@ShellOption(help = "Id of the city to delete.", value = "id") String id) {
+		try {
+			cityService.deleteById(UUID.fromString(id));
+			return MESSAGE_CITY_DELETED.replace("{id}", id);
+		} catch (Exception e) {
+			return exceptionToStringMapper.map(e);
+		}
+	}
+
 	@ShellMethod(value = "Finds a city by id.", key = { "find-city", "fc" })
 	public String findById(@ShellOption(help = "Id of the city.", value = "id") String id) {
 		try {
@@ -59,4 +70,5 @@ public class CityCommands {
 		return cityService.findAll().stream().map(City::toString).reduce((s0, s1) -> s0 + "\n" + s1)
 				.orElse(MESSAGE_NO_DATA);
 	}
+
 }

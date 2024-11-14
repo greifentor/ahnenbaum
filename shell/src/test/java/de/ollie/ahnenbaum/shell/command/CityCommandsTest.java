@@ -1,6 +1,7 @@
 package de.ollie.ahnenbaum.shell.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -93,6 +94,33 @@ class CityCommandsTest {
 			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.changeName(UID.toString(), NAME);
+			// Check
+			assertEquals(MAPPED_EXCEPTION_MESSAGE, returned);
+		}
+
+	}
+
+	@Nested
+	class TestsOfMethod_delete {
+
+		@Test
+		void returnsACorrectString_whenCityCouldBeDeleted() {
+			// Prepare
+			String expected = CityCommands.MESSAGE_CITY_DELETED.replace("{id}", UID.toString());
+			// Run
+			String returned = unitUnderTest.delete(UID.toString());
+			// Check
+			assertEquals(expected, returned);
+		}
+
+		@Test
+		void returnsExceptionString_whenSomethingWentWrongWhileDeletingTheCity() {
+			// Prepare
+			RuntimeException e = new RuntimeException();
+			doThrow(e).when(cityService).deleteById(UID);
+			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
+			// Run
+			String returned = unitUnderTest.delete(UID.toString());
 			// Check
 			assertEquals(MAPPED_EXCEPTION_MESSAGE, returned);
 		}
