@@ -7,6 +7,6 @@ public class DatabaseToJsonMapper {
 
 	public String map() {
 		// TODO Add implementation.
-		return null;
+		return "{}";
 	}
 }

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.ollie.ahnenbaum.backup.model.DatabaseBRO;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
 import de.ollie.ahnenbaum.core.model.BackupParameters;
 import java.io.IOException;
@@ -29,10 +30,13 @@ class FileBackupAdapterTest {
 	private BackupFileWriter backupFileWriter;
 
 	@Mock
-	private DatabaseToJsonMapper databaseToJsonMapper;
+	private BackupParameters backupParameters;
 
 	@Mock
-	private BackupParameters backupParameters;
+	private DatabaseBRO database;
+
+	@Mock
+	private DatabaseToJsonMapper databaseToJsonMapper;
 
 	@InjectMocks
 	private FileBackupAdapter unitUnderTest;
