@@ -3,24 +3,15 @@ package de.ollie.ahnenbaum.persistence.mapper;
 import de.ollie.ahnenbaum.core.model.City;
 import de.ollie.ahnenbaum.core.model.impl.CityModel;
 import de.ollie.ahnenbaum.persistence.entity.CityDBO;
-import jakarta.inject.Named;
-import lombok.Generated;
+import org.mapstruct.Mapper;
 
-@Named
-@Generated
-public class CityDBOMapper {
+@Mapper(componentModel = "spring")
+public interface CityDBOMapper {
+	CityModel toModelClass(CityDBO dbo);
 
-	public City toModel(CityDBO dbo) {
-		if (dbo == null) {
-			return null;
-		}
-		return new CityModel().setId(dbo.getId()).setName(dbo.getName());
-	}
+	CityDBO toDBO(City model);
 
-	public CityDBO toDBO(CityModel model) {
-		if (model == null) {
-			return null;
-		}
-		return new CityDBO().setId(model.getId()).setName(model.getName());
+	default City toModel(CityDBO dbo) {
+		return toModelClass(dbo);
 	}
 }
