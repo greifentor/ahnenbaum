@@ -7,29 +7,29 @@ title Ahnenbaum Domain Diagram
 
 class City {
 
-	String name
+	String name NOT NULL & UNIQUE
 
 }
 
 class Person {
 
+	String birthName NOT NULL
 	LocalDateTime dateOfBirth
 	LocalDateTime dateOfDeath
-	String name
+	String firstName NOT NULL
+	String lastName NOT NULL
 
 }
 
-enum Gender {
+class Gender {
 
-	FEMALE,
-	MALE,
-	OTHER;
+	String name NOT NULL & UNIQUE
 
 }
 
 class Profession {
 
-	String name
+	String name NOT NULL & UNIQUE
 
 }
 
@@ -54,16 +54,16 @@ enum RelationType {
 
 }
 
-Person "*" --> "1" City : bornIn
-Person "*" --> "1" City : diedIn
-Person "*" -LEFT-> "1" Gender : gender
+Person --> "0..1" City : bornInPlace
+Person --> "0..1" City : diedInPlace
+Person -LEFT-> "1" Gender : gender
 
-PersonProfession "1" -LEFT-> "1" Person : person
-PersonProfession "1" -DOWN-> "1" Profession : profession
+PersonProfession -LEFT-> "1" Person : person
+PersonProfession -DOWN-> "1" Profession : profession
 
-Relation "1" --> "1" Person : person
-Relation "1" --> "1" Person : inRelationWith
-Relation "*" -UP-> "1" RelationType : relationType
+Relation --> "1" Person : person
+Relation --> "1" Person : inRelationWith
+Relation -UP-> "1" RelationType : relationType
 
 
 @enduml

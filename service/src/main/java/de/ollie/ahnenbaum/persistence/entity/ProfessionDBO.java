@@ -19,6 +19,6 @@ public class ProfessionDBO {
 	@Id
 	private UUID id;
 
-	@Column(name = "NAME", unique = true)
+	@Column(name = "NAME", nullable = false, unique = true)
 	private String name;
 }
