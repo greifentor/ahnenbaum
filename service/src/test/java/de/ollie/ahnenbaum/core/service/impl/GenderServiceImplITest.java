@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
-import de.ollie.ahnenbaum.core.model.Place;
+import de.ollie.ahnenbaum.core.model.Gender;
 import jakarta.inject.Inject;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -14,12 +14,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class PlaceServiceImplITest {
+class GenderServiceImplITest {
 
 	private static final String NAME = "name";
 
 	@Inject
-	private PlaceServiceImpl unitUnderTest;
+	private GenderServiceImpl unitUnderTest;
 
 	@AfterEach
 	void afterEach() {
@@ -27,10 +27,10 @@ class PlaceServiceImplITest {
 	}
 
 	@Test
-	void createsANewPlaceWithPassedNameInTheDatabase() {
-		Place model = unitUnderTest.create(NAME);
+	void createsANewGenderWithPassedNameInTheDatabase() {
+		Gender model = unitUnderTest.create(NAME);
 		assertEquals(NAME, model.getName());
-		Place returned = unitUnderTest.findById(model.getId()).get();
+		Gender returned = unitUnderTest.findById(model.getId()).get();
 		assertEquals(NAME, returned.getName());
 	}
 
@@ -41,11 +41,11 @@ class PlaceServiceImplITest {
 	}
 
 	@Test
-	void createsStoresChangesStoresAndFindsAPlace() {
+	void createsStoresChangesStoresAndFindsAGender() {
 		// Run
-		Place model = unitUnderTest.create(NAME);
+		Gender model = unitUnderTest.create(NAME);
 		unitUnderTest.changeName(model.getId(), NAME + 1);
-		Place returned = unitUnderTest.findById(model.getId()).get();
+		Gender returned = unitUnderTest.findById(model.getId()).get();
 		// Check
 		assertEquals(NAME + 1, returned.getName());
 	}
@@ -53,10 +53,10 @@ class PlaceServiceImplITest {
 	@Test
 	void isAbleToFindAllRecords() {
 		// Prepare
-		Place model0 = unitUnderTest.create(NAME + 0);
-		Place model1 = unitUnderTest.create(NAME + 1);
+		Gender model0 = unitUnderTest.create(NAME + 0);
+		Gender model1 = unitUnderTest.create(NAME + 1);
 		// Run
-		List<Place> returned = unitUnderTest.findAll();
+		List<Gender> returned = unitUnderTest.findAll();
 		// Check
 		assertEquals(
 			List.of(model0, model1),
@@ -67,8 +67,8 @@ class PlaceServiceImplITest {
 	@Test
 	void deleteRemovesAnExistingRecord() {
 		// Prepare
-		Place model0 = unitUnderTest.create(NAME + 0);
-		Place model1 = unitUnderTest.create(NAME + 1);
+		Gender model0 = unitUnderTest.create(NAME + 0);
+		Gender model1 = unitUnderTest.create(NAME + 1);
 		// Run
 		unitUnderTest.deleteById(model0.getId());
 		// Check

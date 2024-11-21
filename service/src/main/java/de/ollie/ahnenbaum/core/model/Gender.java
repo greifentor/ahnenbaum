@@ -1,10 +1,9 @@
 package de.ollie.ahnenbaum.core.model;
 
-import lombok.Generated;
+import java.util.UUID;
 
-@Generated
-public enum Gender {
-	FEMALE,
-	MALE,
-	OTHER,
+public interface Gender {
+	UUID getId();
+
+	String getName();
 }

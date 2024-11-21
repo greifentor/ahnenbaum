@@ -28,10 +28,10 @@ class PlaceServiceImplTest {
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private Place place;
+	private Place model;
 
 	@Mock
-	private PlacePersistencePort placePersistencePort;
+	private PlacePersistencePort persistencePort;
 
 	@InjectMocks
 	private PlaceServiceImpl unitUnderTest;
@@ -58,7 +58,7 @@ class PlaceServiceImplTest {
 		void throwsAnException_whenPersistencePortThrowsAnException() {
 			// Prepare
 			RuntimeException e = new RuntimeException();
-			when(placePersistencePort.changeName(UID, NAME)).thenThrow(e);
+			when(persistencePort.changeName(UID, NAME)).thenThrow(e);
 			// Run & Check
 			Exception thrown = assertThrows(RuntimeException.class, () -> unitUnderTest.changeName(UID, NAME));
 			assertSame(thrown, e);
@@ -67,11 +67,11 @@ class PlaceServiceImplTest {
 		@Test
 		void changesTheNameByCallingThePersistencePortCorrectly() {
 			// Prepare
-			when(placePersistencePort.changeName(UID, NAME)).thenReturn(place);
+			when(persistencePort.changeName(UID, NAME)).thenReturn(model);
 			// Run
 			Place returned = unitUnderTest.changeName(UID, NAME);
 			// Check
-			assertEquals(place, returned);
+			assertEquals(model, returned);
 		}
 	}
 
@@ -91,11 +91,11 @@ class PlaceServiceImplTest {
 		@Test
 		void returnsTheReturnedValueOfThePersistencePort() {
 			// Prepare
-			when(placePersistencePort.create(NAME)).thenReturn(place);
+			when(persistencePort.create(NAME)).thenReturn(model);
 			// Run
 			Place returned = unitUnderTest.create(NAME);
 			// Check
-			assertSame(place, returned);
+			assertSame(model, returned);
 		}
 	}
 
@@ -112,7 +112,7 @@ class PlaceServiceImplTest {
 			// Run
 			unitUnderTest.deleteById(UID);
 			// Check
-			verify(placePersistencePort, times(1)).deleteById(UID);
+			verify(persistencePort, times(1)).deleteById(UID);
 		}
 	}
 
@@ -122,8 +122,8 @@ class PlaceServiceImplTest {
 		@Test
 		void returnsTheReturnedValueOfThePersistencePort() {
 			// Prepare
-			List<Place> expected = List.of(place);
-			when(placePersistencePort.findAll()).thenReturn(expected);
+			List<Place> expected = List.of(model);
+			when(persistencePort.findAll()).thenReturn(expected);
 			// Run
 			List<Place> returned = unitUnderTest.findAll();
 			// Check
@@ -142,8 +142,8 @@ class PlaceServiceImplTest {
 		@Test
 		void returnsTheReturnedValueOfThePersistencePort() {
 			// Prepare
-			Optional<Place> expected = Optional.of(place);
-			when(placePersistencePort.findById(UID)).thenReturn(expected);
+			Optional<Place> expected = Optional.of(model);
+			when(persistencePort.findById(UID)).thenReturn(expected);
 			// Run
 			Optional<Place> returned = unitUnderTest.findById(UID);
 			// Check

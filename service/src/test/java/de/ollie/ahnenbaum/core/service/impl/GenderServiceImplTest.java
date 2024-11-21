@@ -9,8 +9,8 @@ import static org.mockito.Mockito.when;
 
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
-import de.ollie.ahnenbaum.core.model.Profession;
-import de.ollie.ahnenbaum.core.service.port.persistence.ProfessionPersistencePort;
+import de.ollie.ahnenbaum.core.model.Gender;
+import de.ollie.ahnenbaum.core.service.port.persistence.GenderPersistencePort;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,19 +22,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class ProfessionServiceImplTest {
+class GenderServiceImplTest {
 
 	private static final String NAME = "name";
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private Profession model;
+	private Gender model;
 
 	@Mock
-	private ProfessionPersistencePort persistencePort;
+	private GenderPersistencePort persistencePort;
 
 	@InjectMocks
-	private ProfessionServiceImpl unitUnderTest;
+	private GenderServiceImpl unitUnderTest;
 
 	@Nested
 	class TestsOfMethod_changeName_String {
@@ -69,7 +69,7 @@ class ProfessionServiceImplTest {
 			// Prepare
 			when(persistencePort.changeName(UID, NAME)).thenReturn(model);
 			// Run
-			Profession returned = unitUnderTest.changeName(UID, NAME);
+			Gender returned = unitUnderTest.changeName(UID, NAME);
 			// Check
 			assertEquals(model, returned);
 		}
@@ -93,7 +93,7 @@ class ProfessionServiceImplTest {
 			// Prepare
 			when(persistencePort.create(NAME)).thenReturn(model);
 			// Run
-			Profession returned = unitUnderTest.create(NAME);
+			Gender returned = unitUnderTest.create(NAME);
 			// Check
 			assertSame(model, returned);
 		}
@@ -122,10 +122,10 @@ class ProfessionServiceImplTest {
 		@Test
 		void returnsTheReturnedValueOfThePersistencePort() {
 			// Prepare
-			List<Profession> expected = List.of(model);
+			List<Gender> expected = List.of(model);
 			when(persistencePort.findAll()).thenReturn(expected);
 			// Run
-			List<Profession> returned = unitUnderTest.findAll();
+			List<Gender> returned = unitUnderTest.findAll();
 			// Check
 			assertSame(expected, returned);
 		}
@@ -142,10 +142,10 @@ class ProfessionServiceImplTest {
 		@Test
 		void returnsTheReturnedValueOfThePersistencePort() {
 			// Prepare
-			Optional<Profession> expected = Optional.of(model);
+			Optional<Gender> expected = Optional.of(model);
 			when(persistencePort.findById(UID)).thenReturn(expected);
 			// Run
-			Optional<Profession> returned = unitUnderTest.findById(UID);
+			Optional<Gender> returned = unitUnderTest.findById(UID);
 			// Check
 			assertSame(expected, returned);
 		}

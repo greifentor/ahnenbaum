@@ -22,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProfessionPersistenceJPAAdapter implements ProfessionPersistencePort {
 
-	private static final String MESSAGE_NAME_CANNOT_BE_NULL = "name cannot be null!";
-	private static final String MESSAGE_NAME_CANNOT_BE_EMPTY = "name cannot be blank!";
 	private final ProfessionDBOFactory factory;
 	private final ProfessionDBOMapper mapper;
 	private final ProfessionDBORepository repository;
@@ -51,8 +49,8 @@ public class ProfessionPersistenceJPAAdapter implements ProfessionPersistencePor
 			repository.findByName(name).isEmpty(),
 			new UniqueConstraintViolationException(name, Profession.class.getSimpleName(), "name")
 		);
-		ProfessionDBO Profession = factory.create(name);
-		return mapper.toModel(repository.save(Profession));
+		ProfessionDBO dbo = factory.create(name);
+		return mapper.toModel(repository.save(dbo));
 	}
 
 	@Override

@@ -28,9 +28,9 @@ class ProfessionServiceImplITest {
 
 	@Test
 	void createsANewProfessionWithPassedNameInTheDatabase() {
-		Profession profession = unitUnderTest.create(NAME);
-		assertEquals(NAME, profession.getName());
-		Profession returned = unitUnderTest.findById(profession.getId()).get();
+		Profession model = unitUnderTest.create(NAME);
+		assertEquals(NAME, model.getName());
+		Profession returned = unitUnderTest.findById(model.getId()).get();
 		assertEquals(NAME, returned.getName());
 	}
 
@@ -40,38 +40,38 @@ class ProfessionServiceImplITest {
 		assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.create(NAME));
 	}
 
-	// @Test
+	@Test
 	void createsStoresChangesStoresAndFindsAProfession() {
 		// Run
-		Profession profession = unitUnderTest.create(NAME);
-		unitUnderTest.changeName(profession.getId(), NAME);
-		Profession returned = unitUnderTest.findById(profession.getId()).get();
+		Profession model = unitUnderTest.create(NAME);
+		unitUnderTest.changeName(model.getId(), NAME + 1);
+		Profession returned = unitUnderTest.findById(model.getId()).get();
 		// Check
 		assertEquals(NAME + 1, returned.getName());
 	}
 
-	// @Test
+	@Test
 	void isAbleToFindAllRecords() {
 		// Prepare
-		Profession profession0 = unitUnderTest.create(NAME + 0);
-		Profession profession1 = unitUnderTest.create(NAME + 1);
+		Profession model0 = unitUnderTest.create(NAME + 0);
+		Profession model1 = unitUnderTest.create(NAME + 1);
 		// Run
 		List<Profession> returned = unitUnderTest.findAll();
 		// Check
 		assertEquals(
-			List.of(profession0, profession1),
+			List.of(model0, model1),
 			returned.stream().sorted((p0, p1) -> p0.getName().compareTo(p1.getName())).toList()
 		);
 	}
 
-	// @Test
+	@Test
 	void deleteRemovesAnExistingRecord() {
 		// Prepare
-		Profession profession0 = unitUnderTest.create(NAME + 0);
-		Profession profession1 = unitUnderTest.create(NAME + 1);
+		Profession model0 = unitUnderTest.create(NAME + 0);
+		Profession model1 = unitUnderTest.create(NAME + 1);
 		// Run
-		unitUnderTest.deleteById(profession0.getId());
+		unitUnderTest.deleteById(model0.getId());
 		// Check
-		assertEquals(profession1, unitUnderTest.findAll().get(0));
+		assertEquals(model1, unitUnderTest.findAll().get(0));
 	}
 }
