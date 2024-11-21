@@ -13,11 +13,11 @@ import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
 import de.ollie.ahnenbaum.core.exception.ParameterIsBlankException;
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
-import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.persistence.entity.CityDBO;
-import de.ollie.ahnenbaum.persistence.factory.CityDBOFactory;
-import de.ollie.ahnenbaum.persistence.mapper.CityDBOMapper;
-import de.ollie.ahnenbaum.persistence.repository.CityDBORepository;
+import de.ollie.ahnenbaum.core.model.Place;
+import de.ollie.ahnenbaum.persistence.entity.PlaceDBO;
+import de.ollie.ahnenbaum.persistence.factory.PlaceDBOFactory;
+import de.ollie.ahnenbaum.persistence.mapper.PlaceDBOMapper;
+import de.ollie.ahnenbaum.persistence.repository.PlaceDBORepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,34 +29,34 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CityPersistenceJPAAdapterTest {
+class PlacePersistenceJPAAdapterTest {
 
 	private static final String NAME = "name";
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private City model0;
+	private Place model0;
 
 	@Mock
-	private City model1;
+	private Place model1;
 
 	@Mock
-	private CityDBO dbo0;
+	private PlaceDBO dbo0;
 
 	@Mock
-	private CityDBO dbo1;
+	private PlaceDBO dbo1;
 
 	@Mock
-	private CityDBOFactory factory;
+	private PlaceDBOFactory factory;
 
 	@Mock
-	private CityDBOMapper mapper;
+	private PlaceDBOMapper mapper;
 
 	@Mock
-	private CityDBORepository repository;
+	private PlaceDBORepository repository;
 
 	@InjectMocks
-	private CityPersistenceJPAAdapter unitUnderTest;
+	private PlacePersistenceJPAAdapter unitUnderTest;
 
 	@Nested
 	class TestsOfMethod_changeName_UUID_String {
@@ -84,7 +84,7 @@ class CityPersistenceJPAAdapterTest {
 			when(repository.save(dbo0)).thenReturn(dbo0);
 			when(mapper.toModel(dbo0)).thenReturn(model0);
 			// Run
-			City returned = unitUnderTest.changeName(UID, NAME);
+			Place returned = unitUnderTest.changeName(UID, NAME);
 			// Check
 			assertEquals(model0, returned);
 		}
@@ -122,14 +122,14 @@ class CityPersistenceJPAAdapterTest {
 		}
 
 		@Test
-		void returnsANewCity() {
+		void returnsANewPlace() {
 			// Prepare
 			when(factory.create(NAME)).thenReturn(dbo0);
 			when(repository.findByName(NAME)).thenReturn(Optional.empty());
 			when(repository.save(dbo0)).thenReturn(dbo0);
 			when(mapper.toModel(dbo0)).thenReturn(model0);
 			// Run
-			City returned = unitUnderTest.create(NAME);
+			Place returned = unitUnderTest.create(NAME);
 			// Check
 			assertSame(model0, returned);
 		}

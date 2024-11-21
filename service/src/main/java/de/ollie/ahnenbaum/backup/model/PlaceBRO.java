@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
 @Data
-public class CityBRO {
+public class PlaceBRO {
 
 	private UUID id;
 	private String name;

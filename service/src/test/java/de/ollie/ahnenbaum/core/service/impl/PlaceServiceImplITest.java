@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
-import de.ollie.ahnenbaum.core.model.City;
+import de.ollie.ahnenbaum.core.model.Place;
 import jakarta.inject.Inject;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -14,12 +14,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class CityServiceImplITest {
+class PlaceServiceImplITest {
 
 	private static final String NAME = "name";
 
 	@Inject
-	private CityServiceImpl unitUnderTest;
+	private PlaceServiceImpl unitUnderTest;
 
 	@AfterEach
 	void afterEach() {
@@ -27,10 +27,10 @@ class CityServiceImplITest {
 	}
 
 	@Test
-	void createsANewCityWithPassedNameInTheDatabase() {
-		City city = unitUnderTest.create(NAME);
-		assertEquals(NAME, city.getName());
-		City returned = unitUnderTest.findById(city.getId()).get();
+	void createsANewPlaceWithPassedNameInTheDatabase() {
+		Place place = unitUnderTest.create(NAME);
+		assertEquals(NAME, place.getName());
+		Place returned = unitUnderTest.findById(place.getId()).get();
 		assertEquals(NAME, returned.getName());
 	}
 
@@ -41,11 +41,11 @@ class CityServiceImplITest {
 	}
 
 	// @Test
-	void createsStoresChangesStoresAndFindsACity() {
+	void createsStoresChangesStoresAndFindsAPlace() {
 		// Run
-		City city = unitUnderTest.create(NAME);
-		unitUnderTest.changeName(city.getId(), NAME);
-		City returned = unitUnderTest.findById(city.getId()).get();
+		Place place = unitUnderTest.create(NAME);
+		unitUnderTest.changeName(place.getId(), NAME);
+		Place returned = unitUnderTest.findById(place.getId()).get();
 		// Check
 		assertEquals(NAME + 1, returned.getName());
 	}
@@ -53,13 +53,13 @@ class CityServiceImplITest {
 	// @Test
 	void isAbleToFindAllRecords() {
 		// Prepare
-		City city0 = unitUnderTest.create(NAME + 0);
-		City city1 = unitUnderTest.create(NAME + 1);
+		Place place0 = unitUnderTest.create(NAME + 0);
+		Place place1 = unitUnderTest.create(NAME + 1);
 		// Run
-		List<City> returned = unitUnderTest.findAll();
+		List<Place> returned = unitUnderTest.findAll();
 		// Check
 		assertEquals(
-			List.of(city0, city1),
+			List.of(place0, place1),
 			returned.stream().sorted((c0, c1) -> c0.getName().compareTo(c1.getName())).toList()
 		);
 	}
@@ -67,11 +67,11 @@ class CityServiceImplITest {
 	// @Test
 	void deleteRemovesAnExistingRecord() {
 		// Prepare
-		City city0 = unitUnderTest.create(NAME + 0);
-		City city1 = unitUnderTest.create(NAME + 1);
+		Place place0 = unitUnderTest.create(NAME + 0);
+		Place place1 = unitUnderTest.create(NAME + 1);
 		// Run
-		unitUnderTest.deleteById(city0.getId());
+		unitUnderTest.deleteById(place0.getId());
 		// Check
-		assertEquals(city1, unitUnderTest.findAll().get(0));
+		assertEquals(place1, unitUnderTest.findAll().get(0));
 	}
 }

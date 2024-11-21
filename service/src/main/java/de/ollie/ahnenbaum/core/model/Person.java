@@ -1,19 +1,19 @@
 package de.ollie.ahnenbaum.core.model;
 
-import de.ollie.ahnenbaum.core.model.impl.CityModel;
+import de.ollie.ahnenbaum.core.model.impl.PlaceModel;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface Person {
 	UUID getId();
 
-	CityModel getBornIn();
+	PlaceModel getBornIn();
 
 	LocalDateTime getDateOfBirth();
 
 	LocalDateTime getDateOfDeath();
 
-	CityModel getDiedIn();
+	PlaceModel getDiedIn();
 
 	String getForename();
 

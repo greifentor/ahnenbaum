@@ -5,7 +5,7 @@ title Ahnenbaum Domain Diagram
 '!theme mono
 'COMMENT - skinparam linetype ortho
 
-class City {
+class Gender {
 
 	String name NOT NULL & UNIQUE
 
@@ -21,7 +21,7 @@ class Person {
 
 }
 
-class Gender {
+class Place {
 
 	String name NOT NULL & UNIQUE
 
@@ -54,8 +54,8 @@ enum RelationType {
 
 }
 
-Person --> "0..1" City : bornInPlace
-Person --> "0..1" City : diedInPlace
+Person --> "0..1" Place : bornInPlace 
+Person --> "0..1" Place : diedInPlace
 Person -LEFT-> "1" Gender : gender
 
 PersonProfession -LEFT-> "1" Person : person

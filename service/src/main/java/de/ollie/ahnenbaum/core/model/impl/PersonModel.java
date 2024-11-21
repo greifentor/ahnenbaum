@@ -14,10 +14,10 @@ import lombok.experimental.Accessors;
 public class PersonModel implements Person {
 
 	private UUID id;
-	private CityModel bornIn;
+	private PlaceModel bornIn;
 	private LocalDateTime dateOfBirth;
 	private LocalDateTime dateOfDeath;
-	private CityModel diedIn;
+	private PlaceModel diedIn;
 	private String forename;
 	private Gender gender;
 	private String lastname;

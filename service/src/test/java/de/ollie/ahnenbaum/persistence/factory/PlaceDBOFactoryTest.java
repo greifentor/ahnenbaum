@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import de.ollie.ahnenbaum.core.service.UUIDService;
 import de.ollie.ahnenbaum.core.service.impl.UUIDServiceImpl;
-import de.ollie.ahnenbaum.persistence.factory.CityDBOFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +13,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CityDBOFactoryTest {
+class PlaceDBOFactoryTest {
 
 	private static final String NAME = "name";
 
@@ -22,20 +21,20 @@ class CityDBOFactoryTest {
 	private UUIDService uuidService = new UUIDServiceImpl();
 
 	@InjectMocks
-	private CityDBOFactory unitUnderTest;
+	private PlaceDBOFactory unitUnderTest;
 
 	@Test
-	void returnsACityDBO() {
+	void returnsAPlaceDBO() {
 		assertNotNull(unitUnderTest.create(NAME));
 	}
 
 	@Test
-	void returnsANewCityDBO_onEachCall() {
+	void returnsANewPlaceDBO_onEachCall() {
 		assertNotSame(unitUnderTest.create(NAME), unitUnderTest.create(NAME));
 	}
 
 	@Test
-	void returnsANewDifferentCityDBO_onEachCall() {
+	void returnsANewDifferentPlaceDBO_onEachCall() {
 		assertNotEquals(unitUnderTest.create(NAME), unitUnderTest.create(NAME));
 	}
 }

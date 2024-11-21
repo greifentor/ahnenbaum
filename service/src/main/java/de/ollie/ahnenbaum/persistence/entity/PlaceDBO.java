@@ -11,10 +11,10 @@ import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
 @Data
-@Entity(name = "City")
+@Entity(name = "Place")
 @Generated
-@Table(name = "CITY")
-public class CityDBO {
+@Table(name = "PLACE")
+public class PlaceDBO {
 
 	@Id
 	private UUID id;

@@ -4,9 +4,9 @@ import static de.ollie.ahnenbaum.util.Check.ensure;
 
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
-import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.core.service.CityService;
-import de.ollie.ahnenbaum.core.service.port.persistence.CityPersistencePort;
+import de.ollie.ahnenbaum.core.model.Place;
+import de.ollie.ahnenbaum.core.service.PlaceService;
+import de.ollie.ahnenbaum.core.service.port.persistence.PlacePersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
@@ -15,41 +15,41 @@ import lombok.RequiredArgsConstructor;
 
 @Named
 @RequiredArgsConstructor
-class CityServiceImpl implements CityService {
+class PlaceServiceImpl implements PlaceService {
 
 	private static final String MESSAGE_NAME_CANNOT_BE_EMPTY = "name cannot be blank!";
 
-	private final CityPersistencePort persistencePort;
+	private final PlacePersistencePort persistencePort;
 
 	@Override
-	public City changeName(UUID id, String name) {
-		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
-		ensure(name != null, new ParameterIsNullException(City.class.getSimpleName(), "name"));
+	public Place changeName(UUID id, String name) {
+		ensure(id != null, new ParameterIsNullException(Place.class.getSimpleName(), "id"));
+		ensure(name != null, new ParameterIsNullException(Place.class.getSimpleName(), "name"));
 		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
 		return persistencePort.changeName(id, name);
 	}
 
 	@Override
-	public City create(String name) {
-		ensure(name != null, new ParameterIsNullException(City.class.getSimpleName(), "name"));
+	public Place create(String name) {
+		ensure(name != null, new ParameterIsNullException(Place.class.getSimpleName(), "name"));
 		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
 		return persistencePort.create(name);
 	}
 
 	@Override
 	public void deleteById(UUID id) {
-		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
+		ensure(id != null, new ParameterIsNullException(Place.class.getSimpleName(), "id"));
 		persistencePort.deleteById(id);
 	}
 
 	@Override
-	public Optional<City> findById(UUID id) {
-		ensure(id != null, new ParameterIsNullException(City.class.getSimpleName(), "id"));
+	public Optional<Place> findById(UUID id) {
+		ensure(id != null, new ParameterIsNullException(Place.class.getSimpleName(), "id"));
 		return persistencePort.findById(id);
 	}
 
 	@Override
-	public List<City> findAll() {
+	public List<Place> findAll() {
 		return persistencePort.findAll();
 	}
 }

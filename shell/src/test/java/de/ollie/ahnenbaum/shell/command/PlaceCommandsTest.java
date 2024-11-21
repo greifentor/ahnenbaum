@@ -16,40 +16,40 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.ollie.ahnenbaum.core.exception.ServiceException;
-import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.core.model.impl.CityModel;
-import de.ollie.ahnenbaum.core.service.CityService;
+import de.ollie.ahnenbaum.core.model.Place;
+import de.ollie.ahnenbaum.core.model.impl.PlaceModel;
+import de.ollie.ahnenbaum.core.service.PlaceService;
 import de.ollie.ahnenbaum.shell.ExceptionToStringMapper;
 
 @ExtendWith(MockitoExtension.class)
-class CityCommandsTest {
+class PlaceCommandsTest {
 
 	private static final String NAME = "name";
 	private static final String MAPPED_EXCEPTION_MESSAGE = "mapped-exception-message";
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private CityService cityService;
+	private PlaceService placeService;
 
 	@Mock
 	private ExceptionToStringMapper exceptionToStringMapper;
 
 	@InjectMocks
-	private CityCommands unitUnderTest;
+	private PlaceCommands unitUnderTest;
 
-	private City createCity(String name, UUID uuid) {
-		return new CityModel().setId(uuid).setName(name);
+	private Place createPlace(String name, UUID uuid) {
+		return new PlaceModel().setId(uuid).setName(name);
 	}
 
 	@Nested
-	class TestsOfMethod_AddCity {
+	class TestsOfMethod_AddPlace {
 
 		@Test
-		void returnsTheCorrectString_whenCityHasBeenCreated() {
+		void returnsTheCorrectString_whenPlaceHasBeenCreated() {
 			// Prepare
-			City city = createCity(NAME, UID);
-			String expected = city.toString();
-			when(cityService.create(NAME)).thenReturn(city);
+			Place place = createPlace(NAME, UID);
+			String expected = place.toString();
+			when(placeService.create(NAME)).thenReturn(place);
 			// Run
 			String returned = unitUnderTest.add(NAME);
 			// Check
@@ -57,11 +57,11 @@ class CityCommandsTest {
 		}
 
 		@Test
-		void returnsTheCorrectString_whenCityCanNotBeCreated_byAlreadyExistingName() {
+		void returnsTheCorrectString_whenPlaceCanNotBeCreated_byAlreadyExistingName() {
 			// Prepare
 			String expected = MAPPED_EXCEPTION_MESSAGE;
-			ServiceException thrown = new ServiceException(CityCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
-			when(cityService.create(NAME)).thenThrow(thrown);
+			ServiceException thrown = new ServiceException(PlaceCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
+			when(placeService.create(NAME)).thenThrow(thrown);
 			when(exceptionToStringMapper.map(thrown)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.add(NAME);
@@ -75,11 +75,11 @@ class CityCommandsTest {
 	class TestsOfMethod_ChangeName {
 
 		@Test
-		void returnsTheCorrectString_whenCitiesNameHasBeenChanged() {
+		void returnsTheCorrectString_whenPlacesNameHasBeenChanged() {
 			// Prepare
-			City city = createCity(NAME, UID);
-			String expected = city.toString();
-			when(cityService.changeName(UID, NAME)).thenReturn(city);
+			Place place = createPlace(NAME, UID);
+			String expected = place.toString();
+			when(placeService.changeName(UID, NAME)).thenReturn(place);
 			// Run
 			String returned = unitUnderTest.changeName(UID.toString(), NAME);
 			// Check
@@ -90,7 +90,7 @@ class CityCommandsTest {
 		void returnsExceptionString_whenSomethingWentWrongWhileChangingTheName() {
 			// Prepare
 			RuntimeException e = new RuntimeException();
-			when(cityService.changeName(UID, NAME)).thenThrow(e);
+			when(placeService.changeName(UID, NAME)).thenThrow(e);
 			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.changeName(UID.toString(), NAME);
@@ -104,9 +104,9 @@ class CityCommandsTest {
 	class TestsOfMethod_delete {
 
 		@Test
-		void returnsACorrectString_whenCityCouldBeDeleted() {
+		void returnsACorrectString_whenPlaceCouldBeDeleted() {
 			// Prepare
-			String expected = CityCommands.MESSAGE_CITY_DELETED.replace("{id}", UID.toString());
+			String expected = PlaceCommands.MESSAGE_PLACE_DELETED.replace("{id}", UID.toString());
 			// Run
 			String returned = unitUnderTest.delete(UID.toString());
 			// Check
@@ -114,10 +114,10 @@ class CityCommandsTest {
 		}
 
 		@Test
-		void returnsExceptionString_whenSomethingWentWrongWhileDeletingTheCity() {
+		void returnsExceptionString_whenSomethingWentWrongWhileDeletingThePlace() {
 			// Prepare
 			RuntimeException e = new RuntimeException();
-			doThrow(e).when(cityService).deleteById(UID);
+			doThrow(e).when(placeService).deleteById(UID);
 			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.delete(UID.toString());
@@ -128,38 +128,38 @@ class CityCommandsTest {
 	}
 
 	@Nested
-	class TestsOfMethod_FindCity {
+	class TestsOfMethod_FindPlace {
 
 		@Test
-		void returnsTheCorrectString_whenCityHasBeenCreated() {
+		void returnsTheCorrectString_whenPlaceHasBeenCreated() {
 			// Prepare
-			City city = createCity(NAME, UID);
-			String expected = city.toString();
-			when(cityService.findById(city.getId())).thenReturn(Optional.of(city));
+			Place place = createPlace(NAME, UID);
+			String expected = place.toString();
+			when(placeService.findById(place.getId())).thenReturn(Optional.of(place));
 			// Run
-			String returned = unitUnderTest.findById(city.getId().toString());
+			String returned = unitUnderTest.findById(place.getId().toString());
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void returnsTheCorrectString_whenCityIsNotPresent() {
+		void returnsTheCorrectString_whenPlaceIsNotPresent() {
 			// Prepare
-			City city = createCity(NAME, UID);
-			String expected = CityCommands.MESSAGE_NO_CITY_WITH_ID.replace("{id}", city.getId().toString());
-			when(cityService.findById(city.getId())).thenReturn(Optional.empty());
+			Place place = createPlace(NAME, UID);
+			String expected = PlaceCommands.MESSAGE_NO_PLACE_WITH_ID.replace("{id}", place.getId().toString());
+			when(placeService.findById(place.getId())).thenReturn(Optional.empty());
 			// Run
-			String returned = unitUnderTest.findById(city.getId().toString());
+			String returned = unitUnderTest.findById(place.getId().toString());
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void returnsTheCorrectString_whenCityCanNotBeCreated_byAlreadyExistingName() {
+		void returnsTheCorrectString_whenPlaceCanNotBeCreated_byAlreadyExistingName() {
 			// Prepare
 			String expected = MAPPED_EXCEPTION_MESSAGE;
-			ServiceException thrown = new ServiceException(CityCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
-			when(cityService.findById(UID)).thenThrow(thrown);
+			ServiceException thrown = new ServiceException(PlaceCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
+			when(placeService.findById(UID)).thenThrow(thrown);
 			when(exceptionToStringMapper.map(thrown)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.findById(UID.toString());
@@ -170,16 +170,16 @@ class CityCommandsTest {
 	}
 
 	@Nested
-	class TestsOfMethod_ListCities {
+	class TestsOfMethod_ListPlaces {
 
 		@Test
-		void returnsTheCorrectString_whenCitiesAreStored() {
+		void returnsTheCorrectString_whenPlacesAreStored() {
 			// Prepare
-			City city0 = createCity(NAME + 0, UID);
-			City city1 = createCity(NAME + 1, UUID.randomUUID());
-			String expected = city0 + "\n" + city1;
-			List<City> cities = List.of(city0, city1);
-			when(cityService.findAll()).thenReturn(cities);
+			Place place0 = createPlace(NAME + 0, UID);
+			Place place1 = createPlace(NAME + 1, UUID.randomUUID());
+			String expected = place0 + "\n" + place1;
+			List<Place> cities = List.of(place0, place1);
+			when(placeService.findAll()).thenReturn(cities);
 			// Run
 			String returned = unitUnderTest.list();
 			// Check
@@ -187,11 +187,11 @@ class CityCommandsTest {
 		}
 
 		@Test
-		void returnsTheCorrectString_whenNoCitiesAreStored() {
+		void returnsTheCorrectString_whenNoPlacesAreStored() {
 			// Prepare
-			String expected = CityCommands.MESSAGE_NO_DATA;
-			List<City> cities = List.of();
-			when(cityService.findAll()).thenReturn(cities);
+			String expected = PlaceCommands.MESSAGE_NO_DATA;
+			List<Place> cities = List.of();
+			when(placeService.findAll()).thenReturn(cities);
 			// Run
 			String returned = unitUnderTest.list();
 			// Check

@@ -8,6 +8,6 @@ import lombok.experimental.Accessors;
 @Data
 public class DatabaseBRO {
 
-	private List<CityBRO> cities;
+	private List<PlaceBRO> places;
 	private List<ProfessionBRO> professions;
 }

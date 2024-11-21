@@ -41,7 +41,7 @@ class ProfessionServiceImplITest {
 	}
 
 	// @Test
-	void createsStoresChangesStoresAndFindsACity() {
+	void createsStoresChangesStoresAndFindsAProfession() {
 		// Run
 		Profession profession = unitUnderTest.create(NAME);
 		unitUnderTest.changeName(profession.getId(), NAME);

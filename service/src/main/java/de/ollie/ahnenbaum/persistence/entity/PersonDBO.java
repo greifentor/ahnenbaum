@@ -2,7 +2,10 @@ package de.ollie.ahnenbaum.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.Data;
@@ -22,8 +25,9 @@ public class PersonDBO {
 	@Column(name = "BIRTH_NAME")
 	private String birthName;
 
-	@Column(name = "BORN_IN_PLACE")
-	private CityDBO bornInPlace;
+	@JoinColumn(name = "BORN_IN_PLACE", referencedColumnName = "ID")
+	@ManyToOne(fetch = FetchType.EAGER)
+	private PlaceDBO bornInPlace;
 
 	@Column(name = "DATE_OF_BIRTH")
 	private String dateOfBirth;
@@ -31,13 +35,15 @@ public class PersonDBO {
 	@Column(name = "DATE_OF_DEATH")
 	private String dateOfDeath;
 
-	@Column(name = "DIED_IN_PLACE")
-	private CityDBO diedInPlace;
+	@JoinColumn(name = "DIED_IN_PLACE", referencedColumnName = "ID")
+	@ManyToOne(fetch = FetchType.EAGER)
+	private PlaceDBO diedInPlace;
 
 	@Column(name = "FIRST_NAME", nullable = false)
 	private String firstName;
 
-	@Column(name = "GENDER", nullable = false)
+	@JoinColumn(name = "GENDER", referencedColumnName = "ID")
+	@ManyToOne(fetch = FetchType.EAGER)
 	private GenderDBO gender;
 
 	@Column(name = "LAST_NAME", nullable = false)

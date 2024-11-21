@@ -9,8 +9,8 @@ import static org.mockito.Mockito.when;
 
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
-import de.ollie.ahnenbaum.core.model.City;
-import de.ollie.ahnenbaum.core.service.port.persistence.CityPersistencePort;
+import de.ollie.ahnenbaum.core.model.Place;
+import de.ollie.ahnenbaum.core.service.port.persistence.PlacePersistencePort;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,19 +22,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CityServiceImplTest {
+class PlaceServiceImplTest {
 
 	private static final String NAME = "name";
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private City city;
+	private Place place;
 
 	@Mock
-	private CityPersistencePort cityPersistencePort;
+	private PlacePersistencePort placePersistencePort;
 
 	@InjectMocks
-	private CityServiceImpl unitUnderTest;
+	private PlaceServiceImpl unitUnderTest;
 
 	@Nested
 	class TestsOfMethod_changeName_String {
@@ -58,7 +58,7 @@ class CityServiceImplTest {
 		void throwsAnException_whenPersistencePortThrowsAnException() {
 			// Prepare
 			RuntimeException e = new RuntimeException();
-			when(cityPersistencePort.changeName(UID, NAME)).thenThrow(e);
+			when(placePersistencePort.changeName(UID, NAME)).thenThrow(e);
 			// Run & Check
 			Exception thrown = assertThrows(RuntimeException.class, () -> unitUnderTest.changeName(UID, NAME));
 			assertSame(thrown, e);
@@ -67,11 +67,11 @@ class CityServiceImplTest {
 		@Test
 		void changesTheNameByCallingThePersistencePortCorrectly() {
 			// Prepare
-			when(cityPersistencePort.changeName(UID, NAME)).thenReturn(city);
+			when(placePersistencePort.changeName(UID, NAME)).thenReturn(place);
 			// Run
-			City returned = unitUnderTest.changeName(UID, NAME);
+			Place returned = unitUnderTest.changeName(UID, NAME);
 			// Check
-			assertEquals(city, returned);
+			assertEquals(place, returned);
 		}
 	}
 
@@ -91,11 +91,11 @@ class CityServiceImplTest {
 		@Test
 		void returnsTheReturnedValueOfThePersistencePort() {
 			// Prepare
-			when(cityPersistencePort.create(NAME)).thenReturn(city);
+			when(placePersistencePort.create(NAME)).thenReturn(place);
 			// Run
-			City returned = unitUnderTest.create(NAME);
+			Place returned = unitUnderTest.create(NAME);
 			// Check
-			assertSame(city, returned);
+			assertSame(place, returned);
 		}
 	}
 
@@ -112,7 +112,7 @@ class CityServiceImplTest {
 			// Run
 			unitUnderTest.deleteById(UID);
 			// Check
-			verify(cityPersistencePort, times(1)).deleteById(UID);
+			verify(placePersistencePort, times(1)).deleteById(UID);
 		}
 	}
 
@@ -122,10 +122,10 @@ class CityServiceImplTest {
 		@Test
 		void returnsTheReturnedValueOfThePersistencePort() {
 			// Prepare
-			List<City> expected = List.of(city);
-			when(cityPersistencePort.findAll()).thenReturn(expected);
+			List<Place> expected = List.of(place);
+			when(placePersistencePort.findAll()).thenReturn(expected);
 			// Run
-			List<City> returned = unitUnderTest.findAll();
+			List<Place> returned = unitUnderTest.findAll();
 			// Check
 			assertSame(expected, returned);
 		}
@@ -142,10 +142,10 @@ class CityServiceImplTest {
 		@Test
 		void returnsTheReturnedValueOfThePersistencePort() {
 			// Prepare
-			Optional<City> expected = Optional.of(city);
-			when(cityPersistencePort.findById(UID)).thenReturn(expected);
+			Optional<Place> expected = Optional.of(place);
+			when(placePersistencePort.findById(UID)).thenReturn(expected);
 			// Run
-			Optional<City> returned = unitUnderTest.findById(UID);
+			Optional<Place> returned = unitUnderTest.findById(UID);
 			// Check
 			assertSame(expected, returned);
 		}
