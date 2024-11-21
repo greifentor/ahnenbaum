@@ -37,7 +37,7 @@ public class ProfessionCommandsTest {
 	@InjectMocks
 	private ProfessionCommands unitUnderTest;
 
-	private Profession createProfession(String name, UUID uuid) {
+	private Profession createModel(String name, UUID uuid) {
 		return new ProfessionModel().setId(uuid).setName(name);
 	}
 
@@ -47,9 +47,9 @@ public class ProfessionCommandsTest {
 		@Test
 		void returnsTheCorrectString_whenProfessionHasBeenCreated() {
 			// Prepare
-			Profession profession = createProfession(NAME, UID);
-			String expected = profession.toString();
-			when(professionService.create(NAME)).thenReturn(profession);
+			Profession model = createModel(NAME, UID);
+			String expected = model.toString();
+			when(professionService.create(NAME)).thenReturn(model);
 			// Run
 			String returned = unitUnderTest.add(NAME);
 			// Check
@@ -75,11 +75,11 @@ public class ProfessionCommandsTest {
 	class TestsOfMethod_ChangeName {
 
 		@Test
-		void returnsTheCorrectString_whenCitiesNameHasBeenChanged() {
+		void returnsTheCorrectString_whenProfessionNameHasBeenChanged() {
 			// Prepare
-			Profession profession = createProfession(NAME, UID);
-			String expected = profession.toString();
-			when(professionService.changeName(UID, NAME)).thenReturn(profession);
+			Profession model = createModel(NAME, UID);
+			String expected = model.toString();
+			when(professionService.changeName(UID, NAME)).thenReturn(model);
 			// Run
 			String returned = unitUnderTest.changeName(UID.toString(), NAME);
 			// Check
@@ -133,11 +133,11 @@ public class ProfessionCommandsTest {
 		@Test
 		void returnsTheCorrectString_whenProfessionHasBeenCreated() {
 			// Prepare
-			Profession profession = createProfession(NAME, UID);
-			String expected = profession.toString();
-			when(professionService.findById(profession.getId())).thenReturn(Optional.of(profession));
+			Profession model = createModel(NAME, UID);
+			String expected = model.toString();
+			when(professionService.findById(model.getId())).thenReturn(Optional.of(model));
 			// Run
-			String returned = unitUnderTest.findById(profession.getId().toString());
+			String returned = unitUnderTest.findById(model.getId().toString());
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -145,12 +145,12 @@ public class ProfessionCommandsTest {
 		@Test
 		void returnsTheCorrectString_whenProfessionIsNotPresent() {
 			// Prepare
-			Profession profession = createProfession(NAME, UID);
+			Profession model = createModel(NAME, UID);
 			String expected = ProfessionCommands.MESSAGE_NO_PROFESSION_WITH_ID.replace("{id}",
-					profession.getId().toString());
-			when(professionService.findById(profession.getId())).thenReturn(Optional.empty());
+					model.getId().toString());
+			when(professionService.findById(model.getId())).thenReturn(Optional.empty());
 			// Run
-			String returned = unitUnderTest.findById(profession.getId().toString());
+			String returned = unitUnderTest.findById(model.getId().toString());
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -174,13 +174,13 @@ public class ProfessionCommandsTest {
 	class TestsOfMethod_ListCities {
 
 		@Test
-		void returnsTheCorrectString_whenCitiesAreStored() {
+		void returnsTheCorrectString_whenProfessionsAreStored() {
 			// Prepare
-			Profession profession0 = createProfession(NAME + 0, UID);
-			Profession profession1 = createProfession(NAME + 1, UUID.randomUUID());
-			String expected = profession0 + "\n" + profession1;
-			List<Profession> professions = List.of(profession0, profession1);
-			when(professionService.findAll()).thenReturn(professions);
+			Profession model0 = createModel(NAME + 0, UID);
+			Profession model1 = createModel(NAME + 1, UUID.randomUUID());
+			String expected = model0 + "\n" + model1;
+			List<Profession> models = List.of(model0, model1);
+			when(professionService.findAll()).thenReturn(models);
 			// Run
 			String returned = unitUnderTest.list();
 			// Check
@@ -188,11 +188,11 @@ public class ProfessionCommandsTest {
 		}
 
 		@Test
-		void returnsTheCorrectString_whenNoCitiesAreStored() {
+		void returnsTheCorrectString_whenNoProfessionsAreStored() {
 			// Prepare
 			String expected = ProfessionCommands.MESSAGE_NO_DATA;
-			List<Profession> professions = List.of();
-			when(professionService.findAll()).thenReturn(professions);
+			List<Profession> models = List.of();
+			when(professionService.findAll()).thenReturn(models);
 			// Run
 			String returned = unitUnderTest.list();
 			// Check

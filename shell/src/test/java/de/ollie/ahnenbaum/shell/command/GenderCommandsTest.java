@@ -16,40 +16,40 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import de.ollie.ahnenbaum.core.exception.ServiceException;
-import de.ollie.ahnenbaum.core.model.Place;
-import de.ollie.ahnenbaum.core.model.impl.PlaceModel;
-import de.ollie.ahnenbaum.core.service.PlaceService;
+import de.ollie.ahnenbaum.core.model.Gender;
+import de.ollie.ahnenbaum.core.model.impl.GenderModel;
+import de.ollie.ahnenbaum.core.service.GenderService;
 import de.ollie.ahnenbaum.shell.ExceptionToStringMapper;
 
 @ExtendWith(MockitoExtension.class)
-class PlaceCommandsTest {
+class GenderCommandsTest {
 
 	private static final String NAME = "name";
 	private static final String MAPPED_EXCEPTION_MESSAGE = "mapped-exception-message";
 	private static final UUID UID = UUID.randomUUID();
 
 	@Mock
-	private PlaceService placeService;
+	private GenderService genderService;
 
 	@Mock
 	private ExceptionToStringMapper exceptionToStringMapper;
 
 	@InjectMocks
-	private PlaceCommands unitUnderTest;
+	private GenderCommands unitUnderTest;
 
-	private Place createModel(String name, UUID uuid) {
-		return new PlaceModel().setId(uuid).setName(name);
+	private Gender createModel(String name, UUID uuid) {
+		return new GenderModel().setId(uuid).setName(name);
 	}
 
 	@Nested
-	class TestsOfMethod_AddPlace {
+	class TestsOfMethod_AddGender {
 
 		@Test
-		void returnsTheCorrectString_whenPlaceHasBeenCreated() {
+		void returnsTheCorrectString_whenGenderHasBeenCreated() {
 			// Prepare
-			Place model = createModel(NAME, UID);
+			Gender model = createModel(NAME, UID);
 			String expected = model.toString();
-			when(placeService.create(NAME)).thenReturn(model);
+			when(genderService.create(NAME)).thenReturn(model);
 			// Run
 			String returned = unitUnderTest.add(NAME);
 			// Check
@@ -57,11 +57,11 @@ class PlaceCommandsTest {
 		}
 
 		@Test
-		void returnsTheCorrectString_whenPlaceCanNotBeCreated_byAlreadyExistingName() {
+		void returnsTheCorrectString_whenGenderCanNotBeCreated_byAlreadyExistingName() {
 			// Prepare
 			String expected = MAPPED_EXCEPTION_MESSAGE;
-			ServiceException thrown = new ServiceException(PlaceCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
-			when(placeService.create(NAME)).thenThrow(thrown);
+			ServiceException thrown = new ServiceException(GenderCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
+			when(genderService.create(NAME)).thenThrow(thrown);
 			when(exceptionToStringMapper.map(thrown)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.add(NAME);
@@ -75,11 +75,11 @@ class PlaceCommandsTest {
 	class TestsOfMethod_ChangeName {
 
 		@Test
-		void returnsTheCorrectString_whenPlacesNameHasBeenChanged() {
+		void returnsTheCorrectString_whenGendersNameHasBeenChanged() {
 			// Prepare
-			Place model = createModel(NAME, UID);
+			Gender model = createModel(NAME, UID);
 			String expected = model.toString();
-			when(placeService.changeName(UID, NAME)).thenReturn(model);
+			when(genderService.changeName(UID, NAME)).thenReturn(model);
 			// Run
 			String returned = unitUnderTest.changeName(UID.toString(), NAME);
 			// Check
@@ -90,7 +90,7 @@ class PlaceCommandsTest {
 		void returnsExceptionString_whenSomethingWentWrongWhileChangingTheName() {
 			// Prepare
 			RuntimeException e = new RuntimeException();
-			when(placeService.changeName(UID, NAME)).thenThrow(e);
+			when(genderService.changeName(UID, NAME)).thenThrow(e);
 			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.changeName(UID.toString(), NAME);
@@ -104,9 +104,9 @@ class PlaceCommandsTest {
 	class TestsOfMethod_delete {
 
 		@Test
-		void returnsACorrectString_whenPlaceCouldBeDeleted() {
+		void returnsACorrectString_whenGenderCouldBeDeleted() {
 			// Prepare
-			String expected = PlaceCommands.MESSAGE_PLACE_DELETED.replace("{id}", UID.toString());
+			String expected = GenderCommands.MESSAGE_GENDER_DELETED.replace("{id}", UID.toString());
 			// Run
 			String returned = unitUnderTest.delete(UID.toString());
 			// Check
@@ -114,10 +114,10 @@ class PlaceCommandsTest {
 		}
 
 		@Test
-		void returnsExceptionString_whenSomethingWentWrongWhileDeletingThePlace() {
+		void returnsExceptionString_whenSomethingWentWrongWhileDeletingTheGender() {
 			// Prepare
 			RuntimeException e = new RuntimeException();
-			doThrow(e).when(placeService).deleteById(UID);
+			doThrow(e).when(genderService).deleteById(UID);
 			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.delete(UID.toString());
@@ -128,14 +128,14 @@ class PlaceCommandsTest {
 	}
 
 	@Nested
-	class TestsOfMethod_FindPlace {
+	class TestsOfMethod_FindGender {
 
 		@Test
-		void returnsTheCorrectString_whenPlaceHasBeenCreated() {
+		void returnsTheCorrectString_whenGenderHasBeenCreated() {
 			// Prepare
-			Place model = createModel(NAME, UID);
+			Gender model = createModel(NAME, UID);
 			String expected = model.toString();
-			when(placeService.findById(model.getId())).thenReturn(Optional.of(model));
+			when(genderService.findById(model.getId())).thenReturn(Optional.of(model));
 			// Run
 			String returned = unitUnderTest.findById(model.getId().toString());
 			// Check
@@ -143,11 +143,11 @@ class PlaceCommandsTest {
 		}
 
 		@Test
-		void returnsTheCorrectString_whenPlaceIsNotPresent() {
+		void returnsTheCorrectString_whenGenderIsNotPresent() {
 			// Prepare
-			Place model = createModel(NAME, UID);
-			String expected = PlaceCommands.MESSAGE_NO_PLACE_WITH_ID.replace("{id}", model.getId().toString());
-			when(placeService.findById(model.getId())).thenReturn(Optional.empty());
+			Gender model = createModel(NAME, UID);
+			String expected = GenderCommands.MESSAGE_NO_GENDER_WITH_ID.replace("{id}", model.getId().toString());
+			when(genderService.findById(model.getId())).thenReturn(Optional.empty());
 			// Run
 			String returned = unitUnderTest.findById(model.getId().toString());
 			// Check
@@ -155,11 +155,11 @@ class PlaceCommandsTest {
 		}
 
 		@Test
-		void returnsTheCorrectString_whenPlaceCanNotBeCreated_byAlreadyExistingName() {
+		void returnsTheCorrectString_whenGenderCanNotBeCreated_byAlreadyExistingName() {
 			// Prepare
 			String expected = MAPPED_EXCEPTION_MESSAGE;
 			ServiceException thrown = new ServiceException(PlaceCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
-			when(placeService.findById(UID)).thenThrow(thrown);
+			when(genderService.findById(UID)).thenThrow(thrown);
 			when(exceptionToStringMapper.map(thrown)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.findById(UID.toString());
@@ -170,16 +170,16 @@ class PlaceCommandsTest {
 	}
 
 	@Nested
-	class TestsOfMethod_ListPlaces {
+	class TestsOfMethod_ListGenders {
 
 		@Test
-		void returnsTheCorrectString_whenPlacesAreStored() {
+		void returnsTheCorrectString_whenGendersAreStored() {
 			// Prepare
-			Place model0 = createModel(NAME + 0, UID);
-			Place model1 = createModel(NAME + 1, UUID.randomUUID());
+			Gender model0 = createModel(NAME + 0, UID);
+			Gender model1 = createModel(NAME + 1, UUID.randomUUID());
 			String expected = model0 + "\n" + model1;
-			List<Place> models = List.of(model0, model1);
-			when(placeService.findAll()).thenReturn(models);
+			List<Gender> models = List.of(model0, model1);
+			when(genderService.findAll()).thenReturn(models);
 			// Run
 			String returned = unitUnderTest.list();
 			// Check
@@ -187,11 +187,11 @@ class PlaceCommandsTest {
 		}
 
 		@Test
-		void returnsTheCorrectString_whenNoPlacesAreStored() {
+		void returnsTheCorrectString_whenNoGendersAreStored() {
 			// Prepare
-			String expected = PlaceCommands.MESSAGE_NO_DATA;
-			List<Place> models = List.of();
-			when(placeService.findAll()).thenReturn(models);
+			String expected = GenderCommands.MESSAGE_NO_DATA;
+			List<Gender> models = List.of();
+			when(genderService.findAll()).thenReturn(models);
 			// Run
 			String returned = unitUnderTest.list();
 			// Check
