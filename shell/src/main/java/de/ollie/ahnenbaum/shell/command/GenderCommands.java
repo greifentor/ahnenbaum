@@ -6,6 +6,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
 import de.ollie.ahnenbaum.core.model.Gender;
 import de.ollie.ahnenbaum.core.service.GenderService;
 import de.ollie.ahnenbaum.shell.ExceptionToStringMapper;
@@ -40,7 +41,9 @@ public class GenderCommands {
 			@ShellOption(help = "The id of the gender whose name is to change.", value = "id") String id,
 			@ShellOption(help = "New name of the gender.", value = "newName") String newName) {
 		try {
-			return genderService.changeName(UUID.fromString(id), newName).toString();
+			return genderService.findById(UUID.fromString(id))
+					.map(g -> genderService.update(g.setName(newName)).toString())
+					.orElseThrow(() -> new NoSuchRecordException(id, Gender.class.getSimpleName(), "id"));
 		} catch (Exception e) {
 			return exceptionToStringMapper.map(e);
 		}

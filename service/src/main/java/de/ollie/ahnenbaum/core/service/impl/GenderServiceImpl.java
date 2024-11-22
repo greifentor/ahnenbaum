@@ -4,6 +4,7 @@ import static de.ollie.ahnenbaum.util.Check.ensure;
 
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
+import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.Gender;
 import de.ollie.ahnenbaum.core.model.Place;
 import de.ollie.ahnenbaum.core.service.GenderService;
@@ -23,17 +24,13 @@ class GenderServiceImpl implements GenderService {
 	private final GenderPersistencePort persistencePort;
 
 	@Override
-	public Gender changeName(UUID id, String name) {
-		ensure(id != null, new ParameterIsNullException(Place.class.getSimpleName(), "id"));
-		ensure(name != null, new ParameterIsNullException(Place.class.getSimpleName(), "name"));
-		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
-		return persistencePort.changeName(id, name);
-	}
-
-	@Override
 	public Gender create(String name) {
 		ensure(name != null, new ParameterIsNullException(Place.class.getSimpleName(), "name"));
 		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
+		ensure(
+			persistencePort.findByName(name).isEmpty(),
+			new UniqueConstraintViolationException(name, Place.class.getSimpleName(), "name")
+		);
 		return persistencePort.create(name);
 	}
 
@@ -52,5 +49,11 @@ class GenderServiceImpl implements GenderService {
 	@Override
 	public List<Gender> findAll() {
 		return persistencePort.findAll();
+	}
+
+	@Override
+	public Gender update(Gender gender) {
+		ensure(gender != null, new ParameterIsNullException(Gender.class.getSimpleName(), "gender"));
+		return persistencePort.update(gender);
 	}
 }

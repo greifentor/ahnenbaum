@@ -2,7 +2,6 @@ package de.ollie.ahnenbaum.persistence;
 
 import static de.ollie.ahnenbaum.util.Check.ensure;
 
-import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
 import de.ollie.ahnenbaum.core.exception.ParameterIsBlankException;
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
@@ -26,21 +25,6 @@ public class GenderPersistenceJPAAdapter implements GenderPersistencePort {
 	private final GenderDBOFactory factory;
 	private final GenderDBOMapper mapper;
 	private final GenderDBORepository repository;
-
-	@Override
-	public Gender changeName(UUID id, String name) {
-		ensure(id != null, new ParameterIsNullException(Place.class.getSimpleName(), "id"));
-		ensure(name != null, new ParameterIsNullException(Place.class.getSimpleName(), "name"));
-		ensure(!name.isBlank(), new ParameterIsBlankException(Place.class.getSimpleName(), "name"));
-		return repository
-			.findById(id)
-			.map(dbo -> setName(dbo, name))
-			.orElseThrow(() -> new NoSuchRecordException(id.toString(), Gender.class.getSimpleName(), "name"));
-	}
-
-	private Gender setName(GenderDBO dbo, String name) {
-		return mapper.toModel(repository.save(dbo.setName(name)));
-	}
 
 	@Override
 	public Gender create(String name) {
@@ -69,5 +53,25 @@ public class GenderPersistenceJPAAdapter implements GenderPersistencePort {
 	public Optional<Gender> findById(UUID id) {
 		ensure(id != null, new ParameterIsNullException(Gender.class.getSimpleName(), "id"));
 		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
+	public Optional<Gender> findByName(String name) {
+		ensure(name != null, new ParameterIsNullException(Gender.class.getSimpleName(), "name"));
+		return repository.findByName(name).map(mapper::toModel);
+	}
+
+	@Override
+	public Gender update(Gender gender) {
+		ensure(gender != null, new ParameterIsNullException(Gender.class.getSimpleName(), "gender"));
+		ensure(
+			isUnique(gender),
+			new UniqueConstraintViolationException(gender.getName(), Place.class.getSimpleName(), "name")
+		);
+		return mapper.toModel(repository.save(mapper.toDBO(gender)));
+	}
+
+	private boolean isUnique(Gender gender) {
+		return repository.findByName(gender.getName()).map(dbo -> dbo.getId().equals(gender.getId())).orElse(true);
 	}
 }

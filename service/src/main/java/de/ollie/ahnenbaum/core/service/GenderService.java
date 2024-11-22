@@ -8,11 +8,11 @@ import java.util.UUID;
 public interface GenderService {
 	Gender create(String name);
 
-	Gender changeName(UUID id, String name);
-
 	void deleteById(UUID id);
 
 	Optional<Gender> findById(UUID id);
 
 	List<Gender> findAll();
+
+	Gender update(Gender gender);
 }

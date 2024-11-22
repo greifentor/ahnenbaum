@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -30,10 +31,10 @@ public class PersonDBO {
 	private PlaceDBO bornInPlace;
 
 	@Column(name = "DATE_OF_BIRTH")
-	private String dateOfBirth;
+	private LocalDateTime dateOfBirth;
 
 	@Column(name = "DATE_OF_DEATH")
-	private String dateOfDeath;
+	private LocalDateTime dateOfDeath;
 
 	@JoinColumn(name = "DIED_IN_PLACE", referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.EAGER)

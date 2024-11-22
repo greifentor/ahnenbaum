@@ -1,8 +1,8 @@
 package de.ollie.ahnenbaum.core.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
 import de.ollie.ahnenbaum.core.model.Gender;
+import de.ollie.ahnenbaum.core.service.UUIDService;
 import de.ollie.ahnenbaum.core.service.port.persistence.GenderPersistencePort;
 import java.util.List;
 import java.util.Optional;
@@ -33,47 +34,11 @@ class GenderServiceImplTest {
 	@Mock
 	private GenderPersistencePort persistencePort;
 
+	@Mock
+	private UUIDService uuidService;
+
 	@InjectMocks
 	private GenderServiceImpl unitUnderTest;
-
-	@Nested
-	class TestsOfMethod_changeName_String {
-
-		@Test
-		void throwsAnException_passingANullValueAsId() {
-			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.changeName(null, NAME));
-		}
-
-		@Test
-		void throwsAnException_passingANullValueAsName() {
-			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.changeName(UID, null));
-		}
-
-		@Test
-		void throwsAnException_passingABlankStringAsName() {
-			assertThrows(ServiceException.class, () -> unitUnderTest.changeName(UID, "\t\n\r "));
-		}
-
-		@Test
-		void throwsAnException_whenPersistencePortThrowsAnException() {
-			// Prepare
-			RuntimeException e = new RuntimeException();
-			when(persistencePort.changeName(UID, NAME)).thenThrow(e);
-			// Run & Check
-			Exception thrown = assertThrows(RuntimeException.class, () -> unitUnderTest.changeName(UID, NAME));
-			assertSame(thrown, e);
-		}
-
-		@Test
-		void changesTheNameByCallingThePersistencePortCorrectly() {
-			// Prepare
-			when(persistencePort.changeName(UID, NAME)).thenReturn(model);
-			// Run
-			Gender returned = unitUnderTest.changeName(UID, NAME);
-			// Check
-			assertEquals(model, returned);
-		}
-	}
 
 	@Nested
 	class TestsOfMethod_create_String {
@@ -148,6 +113,24 @@ class GenderServiceImplTest {
 			Optional<Gender> returned = unitUnderTest.findById(UID);
 			// Check
 			assertSame(expected, returned);
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_update_Gender {
+
+		@Test
+		void throwsAnException_passingANullValue() {
+			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.update(null));
+		}
+
+		@Test
+		void returnsTheReturnOfThePersistenceMethodCall() {
+			// Prepare
+			Gender expected = mock(Gender.class);
+			when(persistencePort.update(model)).thenReturn(expected);
+			// Run & Check
+			assertSame(expected, unitUnderTest.update(model));
 		}
 	}
 }

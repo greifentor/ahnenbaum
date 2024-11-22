@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -27,34 +28,23 @@ class GenderServiceImplITest {
 	}
 
 	@Test
-	void createsANewGenderWithPassedNameInTheDatabase() {
+	void createsANewGenderWithPassedName_storesItInTheDatabase() {
 		Gender model = unitUnderTest.create(NAME);
 		assertEquals(NAME, model.getName());
-		Gender returned = unitUnderTest.findById(model.getId()).get();
-		assertEquals(NAME, returned.getName());
+		assertEquals(NAME, unitUnderTest.findById(model.getId()).get().getName());
 	}
 
 	@Test
-	void throwsAnException_callTheMethodWithTheSameNameAgain() {
-		unitUnderTest.create(NAME);
+	void throwsAnException_callingTheMethodWithAnAlreadyExistingNameAgain() {
+		unitUnderTest.update(unitUnderTest.create(NAME));
 		assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.create(NAME));
-	}
-
-	@Test
-	void createsStoresChangesStoresAndFindsAGender() {
-		// Run
-		Gender model = unitUnderTest.create(NAME);
-		unitUnderTest.changeName(model.getId(), NAME + 1);
-		Gender returned = unitUnderTest.findById(model.getId()).get();
-		// Check
-		assertEquals(NAME + 1, returned.getName());
 	}
 
 	@Test
 	void isAbleToFindAllRecords() {
 		// Prepare
-		Gender model0 = unitUnderTest.create(NAME + 0);
-		Gender model1 = unitUnderTest.create(NAME + 1);
+		Gender model0 = unitUnderTest.update(unitUnderTest.create(NAME + 0));
+		Gender model1 = unitUnderTest.update(unitUnderTest.create(NAME + 1));
 		// Run
 		List<Gender> returned = unitUnderTest.findAll();
 		// Check
@@ -67,11 +57,18 @@ class GenderServiceImplITest {
 	@Test
 	void deleteRemovesAnExistingRecord() {
 		// Prepare
-		Gender model0 = unitUnderTest.create(NAME + 0);
-		Gender model1 = unitUnderTest.create(NAME + 1);
+		Gender model0 = unitUnderTest.update(unitUnderTest.create(NAME + 0));
+		Gender model1 = unitUnderTest.update(unitUnderTest.create(NAME + 1));
 		// Run
 		unitUnderTest.deleteById(model0.getId());
 		// Check
 		assertEquals(model1, unitUnderTest.findAll().get(0));
+	}
+
+	@Test
+	void throwsAnException_whenOptimisticLockingIsRaised() {
+		Gender model0 = unitUnderTest.update(unitUnderTest.create(NAME));
+		unitUnderTest.update(model0.setName(NAME + 1));
+		assertThrows(OptimisticLockingFailureException.class, () -> unitUnderTest.update(model0.setName(NAME + 2)));
 	}
 }

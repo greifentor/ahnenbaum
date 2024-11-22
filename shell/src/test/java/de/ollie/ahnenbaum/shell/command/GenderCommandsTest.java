@@ -1,6 +1,7 @@
 package de.ollie.ahnenbaum.shell.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -15,9 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
 import de.ollie.ahnenbaum.core.model.Gender;
-import de.ollie.ahnenbaum.core.model.impl.GenderModel;
 import de.ollie.ahnenbaum.core.service.GenderService;
 import de.ollie.ahnenbaum.shell.ExceptionToStringMapper;
 
@@ -38,7 +39,7 @@ class GenderCommandsTest {
 	private GenderCommands unitUnderTest;
 
 	private Gender createModel(String name, UUID uuid) {
-		return new GenderModel().setId(uuid).setName(name);
+		return new Gender().setId(uuid).setName(name);
 	}
 
 	@Nested
@@ -77,9 +78,11 @@ class GenderCommandsTest {
 		@Test
 		void returnsTheCorrectString_whenGendersNameHasBeenChanged() {
 			// Prepare
-			Gender model = createModel(NAME, UID);
-			String expected = model.toString();
-			when(genderService.changeName(UID, NAME)).thenReturn(model);
+			Gender model0 = createModel(NAME, UID);
+			Gender model1 = createModel(NAME, UID);
+			String expected = model1.toString();
+			when(genderService.findById(UID)).thenReturn(Optional.of(model0));
+			when(genderService.update(model0)).thenReturn(model1);
 			// Run
 			String returned = unitUnderTest.changeName(UID.toString(), NAME);
 			// Check
@@ -87,17 +90,27 @@ class GenderCommandsTest {
 		}
 
 		@Test
-		void returnsExceptionString_whenSomethingWentWrongWhileChangingTheName() {
+		void returnsExceptionString_whenNoRecordIsFoundForPassedId() {
 			// Prepare
-			RuntimeException e = new RuntimeException();
-			when(genderService.changeName(UID, NAME)).thenThrow(e);
-			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
+			when(genderService.findById(UID)).thenReturn(Optional.empty());
+			when(exceptionToStringMapper.map(any(NoSuchRecordException.class))).thenReturn(MAPPED_EXCEPTION_MESSAGE);
 			// Run
 			String returned = unitUnderTest.changeName(UID.toString(), NAME);
 			// Check
 			assertEquals(MAPPED_EXCEPTION_MESSAGE, returned);
 		}
 
+		@Test
+		void returnsExceptionString_whenSomethingWentWrongWhileChangingTheName() {
+			// Prepare
+			RuntimeException e = new RuntimeException();
+			when(genderService.findById(UID)).thenThrow(e);
+			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
+			// Run
+			String returned = unitUnderTest.changeName(UID.toString(), NAME);
+			// Check
+			assertEquals(MAPPED_EXCEPTION_MESSAGE, returned);
+		}
 	}
 
 	@Nested
