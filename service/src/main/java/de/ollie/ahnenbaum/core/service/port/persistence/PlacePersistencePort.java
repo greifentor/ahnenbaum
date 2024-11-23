@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PlacePersistencePort {
-	Place changeName(UUID id, String name);
-
 	Place create(String name);
 
 	void deleteById(UUID uuid);
@@ -15,4 +13,8 @@ public interface PlacePersistencePort {
 	List<Place> findAll();
 
 	Optional<Place> findById(UUID id);
+
+	Optional<Place> findByName(String name);
+
+	Place update(Place place);
 }

@@ -36,15 +36,15 @@ class GenderServiceImplITest {
 
 	@Test
 	void throwsAnException_callingTheMethodWithAnAlreadyExistingNameAgain() {
-		unitUnderTest.update(unitUnderTest.create(NAME));
+		unitUnderTest.create(NAME);
 		assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.create(NAME));
 	}
 
 	@Test
 	void isAbleToFindAllRecords() {
 		// Prepare
-		Gender model0 = unitUnderTest.update(unitUnderTest.create(NAME + 0));
-		Gender model1 = unitUnderTest.update(unitUnderTest.create(NAME + 1));
+		Gender model0 = unitUnderTest.create(NAME + 0);
+		Gender model1 = unitUnderTest.create(NAME + 1);
 		// Run
 		List<Gender> returned = unitUnderTest.findAll();
 		// Check
@@ -57,8 +57,8 @@ class GenderServiceImplITest {
 	@Test
 	void deleteRemovesAnExistingRecord() {
 		// Prepare
-		Gender model0 = unitUnderTest.update(unitUnderTest.create(NAME + 0));
-		Gender model1 = unitUnderTest.update(unitUnderTest.create(NAME + 1));
+		Gender model0 = unitUnderTest.create(NAME + 0);
+		Gender model1 = unitUnderTest.create(NAME + 1);
 		// Run
 		unitUnderTest.deleteById(model0.getId());
 		// Check
@@ -67,7 +67,7 @@ class GenderServiceImplITest {
 
 	@Test
 	void throwsAnException_whenOptimisticLockingIsRaised() {
-		Gender model0 = unitUnderTest.update(unitUnderTest.create(NAME));
+		Gender model0 = unitUnderTest.create(NAME);
 		unitUnderTest.update(model0.setName(NAME + 1));
 		assertThrows(OptimisticLockingFailureException.class, () -> unitUnderTest.update(model0.setName(NAME + 2)));
 	}

@@ -1,9 +1,16 @@
 package de.ollie.ahnenbaum.core.model;
 
 import java.util.UUID;
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
 
-public interface Place {
-	UUID getId();
+@Accessors(chain = true)
+@Data
+@Generated
+public class Place {
 
-	String getName();
+	private UUID id;
+	private String name;
+	private Integer version;
 }

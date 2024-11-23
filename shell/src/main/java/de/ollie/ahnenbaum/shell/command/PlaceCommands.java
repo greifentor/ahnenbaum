@@ -6,13 +6,14 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
 import de.ollie.ahnenbaum.core.model.Place;
 import de.ollie.ahnenbaum.core.service.PlaceService;
 import de.ollie.ahnenbaum.shell.ExceptionToStringMapper;
 import lombok.RequiredArgsConstructor;
 
 /**
- * @author ollie (09.11.2024)
+ * @author ollie (11.2024)
  */
 @RequiredArgsConstructor
 @ShellComponent
@@ -40,7 +41,9 @@ public class PlaceCommands {
 			@ShellOption(help = "The id of the place whose name is to change.", value = "id") String id,
 			@ShellOption(help = "New name of the place.", value = "newName") String newName) {
 		try {
-			return placeService.changeName(UUID.fromString(id), newName).toString();
+			return placeService.findById(UUID.fromString(id))
+					.map(g -> placeService.update(g.setName(newName)).toString())
+					.orElseThrow(() -> new NoSuchRecordException(id, Place.class.getSimpleName(), "id"));
 		} catch (Exception e) {
 			return exceptionToStringMapper.map(e);
 		}

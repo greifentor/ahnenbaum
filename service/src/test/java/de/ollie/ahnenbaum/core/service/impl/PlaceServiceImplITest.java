@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -27,27 +28,16 @@ class PlaceServiceImplITest {
 	}
 
 	@Test
-	void createsANewPlaceWithPassedNameInTheDatabase() {
+	void createsANewPlaceWithPassedName_storesItInTheDatabase() {
 		Place model = unitUnderTest.create(NAME);
 		assertEquals(NAME, model.getName());
-		Place returned = unitUnderTest.findById(model.getId()).get();
-		assertEquals(NAME, returned.getName());
+		assertEquals(NAME, unitUnderTest.findById(model.getId()).get().getName());
 	}
 
 	@Test
 	void throwsAnException_callTheMethodWithTheSameNameAgain() {
 		unitUnderTest.create(NAME);
 		assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.create(NAME));
-	}
-
-	@Test
-	void createsStoresChangesStoresAndFindsAPlace() {
-		// Run
-		Place model = unitUnderTest.create(NAME);
-		unitUnderTest.changeName(model.getId(), NAME + 1);
-		Place returned = unitUnderTest.findById(model.getId()).get();
-		// Check
-		assertEquals(NAME + 1, returned.getName());
 	}
 
 	@Test
@@ -73,5 +63,12 @@ class PlaceServiceImplITest {
 		unitUnderTest.deleteById(model0.getId());
 		// Check
 		assertEquals(model1, unitUnderTest.findAll().get(0));
+	}
+
+	@Test
+	void throwsAnException_whenOptimisticLockingIsRaised() {
+		Place model0 = unitUnderTest.create(NAME);
+		unitUnderTest.update(model0.setName(NAME + 1));
+		assertThrows(OptimisticLockingFailureException.class, () -> unitUnderTest.update(model0.setName(NAME + 2)));
 	}
 }

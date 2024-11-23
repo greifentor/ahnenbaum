@@ -6,7 +6,6 @@ import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.ServiceException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
 import de.ollie.ahnenbaum.core.model.Gender;
-import de.ollie.ahnenbaum.core.model.Place;
 import de.ollie.ahnenbaum.core.service.GenderService;
 import de.ollie.ahnenbaum.core.service.port.persistence.GenderPersistencePort;
 import jakarta.inject.Named;
@@ -23,26 +22,28 @@ class GenderServiceImpl implements GenderService {
 
 	private final GenderPersistencePort persistencePort;
 
+	private final String modelClassName = Gender.class.getSimpleName();
+
 	@Override
 	public Gender create(String name) {
-		ensure(name != null, new ParameterIsNullException(Place.class.getSimpleName(), "name"));
+		ensure(name != null, new ParameterIsNullException(modelClassName, "name"));
 		ensure(!name.isBlank(), new ServiceException(MESSAGE_NAME_CANNOT_BE_EMPTY, null, ""));
 		ensure(
 			persistencePort.findByName(name).isEmpty(),
-			new UniqueConstraintViolationException(name, Place.class.getSimpleName(), "name")
+			new UniqueConstraintViolationException(name, modelClassName, "name")
 		);
 		return persistencePort.create(name);
 	}
 
 	@Override
 	public void deleteById(UUID id) {
-		ensure(id != null, new ParameterIsNullException(Place.class.getSimpleName(), "id"));
+		ensure(id != null, new ParameterIsNullException(modelClassName, "id"));
 		persistencePort.deleteById(id);
 	}
 
 	@Override
 	public Optional<Gender> findById(UUID id) {
-		ensure(id != null, new ParameterIsNullException(Place.class.getSimpleName(), "id"));
+		ensure(id != null, new ParameterIsNullException(modelClassName, "id"));
 		return persistencePort.findById(id);
 	}
 
@@ -53,7 +54,7 @@ class GenderServiceImpl implements GenderService {
 
 	@Override
 	public Gender update(Gender gender) {
-		ensure(gender != null, new ParameterIsNullException(Gender.class.getSimpleName(), "gender"));
+		ensure(gender != null, new ParameterIsNullException(modelClassName, "gender"));
 		return persistencePort.update(gender);
 	}
 }

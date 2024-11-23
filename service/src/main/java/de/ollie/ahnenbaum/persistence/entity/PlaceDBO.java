@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -21,4 +22,8 @@ public class PlaceDBO {
 
 	@Column(name = "NAME", nullable = false, unique = true)
 	private String name;
+
+	@Column(name = "VERSION")
+	@Version
+	private Integer version;
 }

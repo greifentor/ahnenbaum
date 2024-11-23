@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
 import de.ollie.ahnenbaum.core.exception.ParameterIsBlankException;
 import de.ollie.ahnenbaum.core.exception.ParameterIsNullException;
 import de.ollie.ahnenbaum.core.exception.UniqueConstraintViolationException;
@@ -32,7 +30,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class PlacePersistenceJPAAdapterTest {
 
 	private static final String NAME = "name";
-	private static final UUID UID = UUID.randomUUID();
+	private static final UUID UID0 = UUID.randomUUID();
+	private static final UUID UID1 = UUID.randomUUID();
 
 	@Mock
 	private Place model0;
@@ -59,48 +58,6 @@ class PlacePersistenceJPAAdapterTest {
 	private PlacePersistenceJPAAdapter unitUnderTest;
 
 	@Nested
-	class TestsOfMethod_changeName_UUID_String {
-
-		@Test
-		void throwsAnException_passingANullValueAsId() {
-			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.changeName(null, NAME));
-		}
-
-		@Test
-		void throwsAnException_passingANullValueAsName() {
-			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.changeName(UID, null));
-		}
-
-		@Test
-		void throwsAnException_passingAnEmptyStringAsName() {
-			assertThrows(ParameterIsBlankException.class, () -> unitUnderTest.changeName(UID, ""));
-		}
-
-		@Test
-		void callsDBOSetNameAndRepositorySave() {
-			// Prepare
-			when(dbo0.setName(NAME)).thenReturn(dbo0);
-			when(repository.findById(UID)).thenReturn(Optional.of(dbo0));
-			when(repository.save(dbo0)).thenReturn(dbo0);
-			when(mapper.toModel(dbo0)).thenReturn(model0);
-			// Run
-			Place returned = unitUnderTest.changeName(UID, NAME);
-			// Check
-			assertEquals(model0, returned);
-		}
-
-		@Test
-		void throwsAnException_whenThereIsNoDboForThePassedId() {
-			// Prepare
-			when(repository.findById(UID)).thenReturn(Optional.empty());
-			// Run
-			assertThrows(NoSuchRecordException.class, () -> unitUnderTest.changeName(UID, NAME));
-			// Check
-			verifyNoInteractions(dbo0);
-		}
-	}
-
-	@Nested
 	class TestsOfMethod_create_String {
 
 		@Test
@@ -122,7 +79,7 @@ class PlacePersistenceJPAAdapterTest {
 		}
 
 		@Test
-		void returnsANewPlace() {
+		void returnsANewRecord() {
 			// Prepare
 			when(factory.create(NAME)).thenReturn(dbo0);
 			when(repository.findByName(NAME)).thenReturn(Optional.empty());
@@ -146,9 +103,9 @@ class PlacePersistenceJPAAdapterTest {
 		@Test
 		void callsTheDeleteByIdMethodOfTheRepositoryCorrectly() {
 			// Run
-			unitUnderTest.deleteById(UID);
+			unitUnderTest.deleteById(UID0);
 			// Check
-			verify(repository, times(1)).deleteById(UID);
+			verify(repository, times(1)).deleteById(UID0);
 		}
 	}
 
@@ -185,10 +142,64 @@ class PlacePersistenceJPAAdapterTest {
 		@Test
 		void returnsTheMappedReturnOfTheRepositoryCall() {
 			// Prepare
-			when(repository.findById(UID)).thenReturn(Optional.of(dbo0));
+			when(repository.findById(UID0)).thenReturn(Optional.of(dbo0));
 			when(mapper.toModel(dbo0)).thenReturn(model0);
 			// Run & Check
-			assertSame(model0, unitUnderTest.findById(UID).get());
+			assertSame(model0, unitUnderTest.findById(UID0).get());
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_findByName_String {
+
+		@Test
+		void throwsAnException_passingANullPointer() {
+			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.findByName(null));
+		}
+
+		@Test
+		void returnsTheMappedReturnOfTheRepositoryCall() {
+			// Prepare
+			when(repository.findByName(NAME)).thenReturn(Optional.of(dbo0));
+			when(mapper.toModel(dbo0)).thenReturn(model0);
+			// Run & Check
+			assertSame(model0, unitUnderTest.findByName(NAME).get());
+		}
+	}
+
+	@Nested
+	class TestsOfMethod_update_Gender {
+
+		@Test
+		void throwsAnException_passingANullValue() {
+			assertThrows(ParameterIsNullException.class, () -> unitUnderTest.update(null));
+		}
+
+		@Test
+		void throwsAnException_passingAGenderWithAnAlreadyExistingNameButUnmatchingId() {
+			// Prepare
+			when(dbo0.getId()).thenReturn(UID0);
+			when(model0.getName()).thenReturn(NAME);
+			when(model0.getId()).thenReturn(UID1);
+			when(repository.findByName(NAME)).thenReturn(Optional.of(dbo0));
+			// Run & Check
+			assertThrows(UniqueConstraintViolationException.class, () -> unitUnderTest.update(model0));
+		}
+
+		@Test
+		void callsRepositoryMethodSaveCorrectly() {
+			// Prepare
+			when(dbo0.getId()).thenReturn(UID0);
+			when(model0.getName()).thenReturn(NAME);
+			when(model0.getId()).thenReturn(UID0);
+			when(repository.findByName(NAME)).thenReturn(Optional.of(dbo0));
+			when(repository.save(dbo0)).thenReturn(dbo1);
+			when(mapper.toDBO(model0)).thenReturn(dbo0);
+			when(mapper.toModel(dbo1)).thenReturn(model1);
+			// Run
+			Place returned = unitUnderTest.update(model0);
+			// Check
+			assertSame(model1, returned);
 		}
 	}
 }
