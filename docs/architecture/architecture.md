@@ -65,7 +65,9 @@ TBD
 
 ## Architecture Decisions
 
-TBD
+### Database
+
+* Using optimistic locking to prevent data loss while saving records.
 
 
 ## Quality
