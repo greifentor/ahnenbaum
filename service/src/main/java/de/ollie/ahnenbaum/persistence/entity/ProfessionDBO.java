@@ -1,9 +1,11 @@
 package de.ollie.ahnenbaum.persistence.entity;
 
+import de.ollie.ahnenbaum.core.model.NameProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -14,11 +16,15 @@ import lombok.experimental.Accessors;
 @Entity(name = "Profession")
 @Generated
 @Table(name = "PROFESSION")
-public class ProfessionDBO {
+public class ProfessionDBO implements NameProvider {
 
 	@Id
 	private UUID id;
 
 	@Column(name = "NAME", nullable = false, unique = true)
 	private String name;
+
+	@Column(name = "VERSION")
+	@Version
+	private Integer version;
 }

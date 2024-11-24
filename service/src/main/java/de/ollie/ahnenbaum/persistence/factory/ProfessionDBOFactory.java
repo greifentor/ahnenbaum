@@ -7,10 +7,11 @@ import lombok.RequiredArgsConstructor;
 
 @Named
 @RequiredArgsConstructor
-public class ProfessionDBOFactory {
+public class ProfessionDBOFactory implements DBOFactory<ProfessionDBO> {
 
 	private final UUIDService uuidService;
 
+	@Override
 	public ProfessionDBO create(String name) {
 		return new ProfessionDBO().setId(uuidService.create()).setName(name);
 	}
