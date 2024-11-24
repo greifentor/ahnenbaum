@@ -5,8 +5,4 @@ import de.ollie.ahnenbaum.persistence.entity.GenderDBO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface GenderDBOMapper {
-	Gender toModel(GenderDBO dbo);
-
-	GenderDBO toDBO(Gender model);
-}
+public interface GenderDBOMapper extends DBOMapper<Gender, GenderDBO> {}

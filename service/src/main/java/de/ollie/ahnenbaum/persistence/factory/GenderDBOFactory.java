@@ -7,10 +7,11 @@ import lombok.RequiredArgsConstructor;
 
 @Named
 @RequiredArgsConstructor
-public class GenderDBOFactory {
+public class GenderDBOFactory implements DBOFactory<GenderDBO> {
 
 	private final UUIDService uuidService;
 
+	@Override
 	public GenderDBO create(String name) {
 		return new GenderDBO().setId(uuidService.create()).setName(name);
 	}

@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class Place {
+public class Place implements NameProvider {
 
 	private UUID id;
 	private String name;

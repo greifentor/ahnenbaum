@@ -5,8 +5,4 @@ import de.ollie.ahnenbaum.persistence.entity.PlaceDBO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface PlaceDBOMapper {
-	Place toModel(PlaceDBO dbo);
-
-	PlaceDBO toDBO(Place model);
-}
+public interface PlaceDBOMapper extends DBOMapper<Place, PlaceDBO> {}

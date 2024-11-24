@@ -1,5 +1,6 @@
 package de.ollie.ahnenbaum.persistence.entity;
 
+import de.ollie.ahnenbaum.core.model.NameProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,7 +16,7 @@ import lombok.experimental.Accessors;
 @Entity(name = "Place")
 @Generated
 @Table(name = "PLACE")
-public class PlaceDBO {
+public class PlaceDBO implements NameProvider {
 
 	@Id
 	private UUID id;
