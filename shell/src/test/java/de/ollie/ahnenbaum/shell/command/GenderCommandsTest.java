@@ -1,33 +1,18 @@
 package de.ollie.ahnenbaum.shell.command;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import de.ollie.ahnenbaum.core.exception.NoSuchRecordException;
-import de.ollie.ahnenbaum.core.exception.ServiceException;
 import de.ollie.ahnenbaum.core.model.Gender;
 import de.ollie.ahnenbaum.core.service.GenderService;
 import de.ollie.ahnenbaum.shell.ExceptionToStringMapper;
 
 @ExtendWith(MockitoExtension.class)
-class GenderCommandsTest {
-
-	private static final String NAME = "name";
-	private static final String MAPPED_EXCEPTION_MESSAGE = "mapped-exception-message";
-	private static final UUID UID = UUID.randomUUID();
+class GenderCommandsTest extends NameProviderCommandsTest<Gender, GenderService, GenderCommands> {
 
 	@Mock
 	private GenderService genderService;
@@ -38,179 +23,39 @@ class GenderCommandsTest {
 	@InjectMocks
 	private GenderCommands unitUnderTest;
 
-	private Gender createModel(String name, UUID uuid) {
+	@Override
+	GenderService nameProviderService() {
+		return genderService;
+	}
+
+	@Override
+	ExceptionToStringMapper exceptionToStringMapper() {
+		return exceptionToStringMapper;
+	}
+
+	@Override
+	Gender createModel(String name, UUID uuid) {
 		return new Gender().setId(uuid).setName(name);
 	}
 
-	@Nested
-	class TestsOfMethod_AddGender {
-
-		@Test
-		void returnsTheCorrectString_whenGenderHasBeenCreated() {
-			// Prepare
-			Gender model = createModel(NAME, UID);
-			String expected = model.toString();
-			when(genderService.create(NAME)).thenReturn(model);
-			// Run
-			String returned = unitUnderTest.add(NAME);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void returnsTheCorrectString_whenGenderCanNotBeCreated_byAlreadyExistingName() {
-			// Prepare
-			String expected = MAPPED_EXCEPTION_MESSAGE;
-			ServiceException thrown = new ServiceException(GenderCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
-			when(genderService.create(NAME)).thenThrow(thrown);
-			when(exceptionToStringMapper.map(thrown)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
-			// Run
-			String returned = unitUnderTest.add(NAME);
-			// Check
-			assertEquals(expected, returned);
-		}
-
+	@Override
+	String messageNoData() {
+		return GenderCommands.MESSAGE_NO_DATA;
 	}
 
-	@Nested
-	class TestsOfMethod_ChangeName {
-
-		@Test
-		void returnsTheCorrectString_whenGendersNameHasBeenChanged() {
-			// Prepare
-			Gender model0 = createModel(NAME, UID);
-			Gender model1 = createModel(NAME, UID);
-			String expected = model1.toString();
-			when(genderService.findById(UID)).thenReturn(Optional.of(model0));
-			when(genderService.update(model0)).thenReturn(model1);
-			// Run
-			String returned = unitUnderTest.changeName(UID.toString(), NAME);
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void returnsExceptionString_whenNoRecordIsFoundForPassedId() {
-			// Prepare
-			when(genderService.findById(UID)).thenReturn(Optional.empty());
-			when(exceptionToStringMapper.map(any(NoSuchRecordException.class))).thenReturn(MAPPED_EXCEPTION_MESSAGE);
-			// Run
-			String returned = unitUnderTest.changeName(UID.toString(), NAME);
-			// Check
-			assertEquals(MAPPED_EXCEPTION_MESSAGE, returned);
-		}
-
-		@Test
-		void returnsExceptionString_whenSomethingWentWrongWhileChangingTheName() {
-			// Prepare
-			RuntimeException e = new RuntimeException();
-			when(genderService.findById(UID)).thenThrow(e);
-			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
-			// Run
-			String returned = unitUnderTest.changeName(UID.toString(), NAME);
-			// Check
-			assertEquals(MAPPED_EXCEPTION_MESSAGE, returned);
-		}
+	@Override
+	String messageNoRecordWithId() {
+		return GenderCommands.MESSAGE_NO_GENDER_WITH_ID;
 	}
 
-	@Nested
-	class TestsOfMethod_delete {
-
-		@Test
-		void returnsACorrectString_whenGenderCouldBeDeleted() {
-			// Prepare
-			String expected = GenderCommands.MESSAGE_GENDER_DELETED.replace("{id}", UID.toString());
-			// Run
-			String returned = unitUnderTest.delete(UID.toString());
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void returnsExceptionString_whenSomethingWentWrongWhileDeletingTheGender() {
-			// Prepare
-			RuntimeException e = new RuntimeException();
-			doThrow(e).when(genderService).deleteById(UID);
-			when(exceptionToStringMapper.map(e)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
-			// Run
-			String returned = unitUnderTest.delete(UID.toString());
-			// Check
-			assertEquals(MAPPED_EXCEPTION_MESSAGE, returned);
-		}
-
+	@Override
+	String messageRecordDeleted() {
+		return GenderCommands.MESSAGE_GENDER_DELETED;
 	}
 
-	@Nested
-	class TestsOfMethod_FindGender {
-
-		@Test
-		void returnsTheCorrectString_whenGenderHasBeenCreated() {
-			// Prepare
-			Gender model = createModel(NAME, UID);
-			String expected = model.toString();
-			when(genderService.findById(model.getId())).thenReturn(Optional.of(model));
-			// Run
-			String returned = unitUnderTest.findById(model.getId().toString());
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void returnsTheCorrectString_whenGenderIsNotPresent() {
-			// Prepare
-			Gender model = createModel(NAME, UID);
-			String expected = GenderCommands.MESSAGE_NO_GENDER_WITH_ID.replace("{id}", model.getId().toString());
-			when(genderService.findById(model.getId())).thenReturn(Optional.empty());
-			// Run
-			String returned = unitUnderTest.findById(model.getId().toString());
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void returnsTheCorrectString_whenGenderCanNotBeCreated_byAlreadyExistingName() {
-			// Prepare
-			String expected = MAPPED_EXCEPTION_MESSAGE;
-			ServiceException thrown = new ServiceException(PlaceCommands.MESSAGE_NAME_ALREADY_EXISTING, null, "");
-			when(genderService.findById(UID)).thenThrow(thrown);
-			when(exceptionToStringMapper.map(thrown)).thenReturn(MAPPED_EXCEPTION_MESSAGE);
-			// Run
-			String returned = unitUnderTest.findById(UID.toString());
-			// Check
-			assertEquals(expected, returned);
-		}
-
-	}
-
-	@Nested
-	class TestsOfMethod_ListGenders {
-
-		@Test
-		void returnsTheCorrectString_whenGendersAreStored() {
-			// Prepare
-			Gender model0 = createModel(NAME + 0, UID);
-			Gender model1 = createModel(NAME + 1, UUID.randomUUID());
-			String expected = model0 + "\n" + model1;
-			List<Gender> models = List.of(model0, model1);
-			when(genderService.findAll()).thenReturn(models);
-			// Run
-			String returned = unitUnderTest.list();
-			// Check
-			assertEquals(expected, returned);
-		}
-
-		@Test
-		void returnsTheCorrectString_whenNoGendersAreStored() {
-			// Prepare
-			String expected = GenderCommands.MESSAGE_NO_DATA;
-			List<Gender> models = List.of();
-			when(genderService.findAll()).thenReturn(models);
-			// Run
-			String returned = unitUnderTest.list();
-			// Check
-			assertEquals(expected, returned);
-		}
-
+	@Override
+	GenderCommands unitUnderTest() {
+		return unitUnderTest;
 	}
 
 }
