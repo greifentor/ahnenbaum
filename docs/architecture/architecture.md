@@ -7,7 +7,7 @@ This document contains architecture descriptions and documentation.
 
 ### Requirements Overview
 
-TBD 
+* The application must be working with up to 1000 Persons.
 
 
 ### Quality Goals
@@ -56,7 +56,8 @@ TBD
 
 ## Crosscutting Concepts
 
-TBD
+* Optimistic locking provided by JPA.
+
 
 ### Domain Diagram
 
