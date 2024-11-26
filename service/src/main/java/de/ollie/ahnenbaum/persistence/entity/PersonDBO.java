@@ -40,7 +40,7 @@ public class PersonDBO {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private PlaceDBO diedInPlace;
 
-	@Column(name = "FIRST_NAME", nullable = false)
+	@Column(name = "FIRST_NAME")
 	private String firstName;
 
 	@JoinColumn(name = "GENDER", referencedColumnName = "ID")
