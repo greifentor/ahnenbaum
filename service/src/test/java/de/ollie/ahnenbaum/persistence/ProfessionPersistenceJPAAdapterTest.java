@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import de.ollie.ahnenbaum.core.model.Profession;
 import de.ollie.ahnenbaum.persistence.entity.ProfessionDBO;
-import de.ollie.ahnenbaum.persistence.factory.ProfessionDBOFactory;
+import de.ollie.ahnenbaum.persistence.factory.DBOFactory;
 import de.ollie.ahnenbaum.persistence.mapper.ProfessionDBOMapper;
 import de.ollie.ahnenbaum.persistence.repository.ProfessionDBORepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +14,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ProfessionPersistenceJPAAdapterTest
-	extends NameProviderPersistenceJPAAdapterTest<Profession, ProfessionDBO, ProfessionPersistenceJPAAdapter, ProfessionDBORepository, ProfessionDBOMapper, ProfessionDBOFactory> {
+	extends NameProviderPersistenceJPAAdapterTest<Profession, ProfessionDBO, ProfessionPersistenceJPAAdapter, ProfessionDBORepository, ProfessionDBOMapper> {
 
 	@Mock
-	private ProfessionDBOFactory factory;
+	private DBOFactory<ProfessionDBO> factory;
 
 	@Mock
 	private ProfessionDBOMapper mapper;
@@ -39,7 +39,7 @@ class ProfessionPersistenceJPAAdapterTest
 	}
 
 	@Override
-	ProfessionDBOFactory factory() {
+	DBOFactory<ProfessionDBO> factory() {
 		return factory;
 	}
 

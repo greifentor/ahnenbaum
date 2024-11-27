@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Named
 @RequiredArgsConstructor
-public class ProfessionDBOFactory implements DBOFactory<ProfessionDBO> {
+class ProfessionDBOFactory implements DBOFactory<ProfessionDBO> {
 
 	private final UUIDService uuidService;
 

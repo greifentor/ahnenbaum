@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Named
 @RequiredArgsConstructor
-public class BackupServiceImpl implements BackupService {
+class BackupServiceImpl implements BackupService {
 
 	private final BackupPort backupPort;
 

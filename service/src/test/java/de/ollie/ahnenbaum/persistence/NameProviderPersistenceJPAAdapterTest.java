@@ -26,8 +26,7 @@ abstract class NameProviderPersistenceJPAAdapterTest<
 	D extends NameProvider,
 	P extends NameProviderPersistenceJPAAdapter<M, D>,
 	R extends NameProviderRepository<D>,
-	O extends DBOMapper<M, D>,
-	F extends DBOFactory<D>
+	O extends DBOMapper<M, D>
 > {
 
 	private static final String NAME = "name";
@@ -38,7 +37,7 @@ abstract class NameProviderPersistenceJPAAdapterTest<
 
 	abstract M createModel();
 
-	abstract F factory();
+	abstract DBOFactory<D> factory();
 
 	abstract O mapper();
 

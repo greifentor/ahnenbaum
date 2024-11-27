@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import de.ollie.ahnenbaum.core.model.Place;
 import de.ollie.ahnenbaum.persistence.entity.PlaceDBO;
-import de.ollie.ahnenbaum.persistence.factory.PlaceDBOFactory;
+import de.ollie.ahnenbaum.persistence.factory.DBOFactory;
 import de.ollie.ahnenbaum.persistence.mapper.PlaceDBOMapper;
 import de.ollie.ahnenbaum.persistence.repository.PlaceDBORepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +14,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class PlacePersistenceJPAAdapterTest
-	extends NameProviderPersistenceJPAAdapterTest<Place, PlaceDBO, PlacePersistenceJPAAdapter, PlaceDBORepository, PlaceDBOMapper, PlaceDBOFactory> {
+	extends NameProviderPersistenceJPAAdapterTest<Place, PlaceDBO, PlacePersistenceJPAAdapter, PlaceDBORepository, PlaceDBOMapper> {
 
 	@Mock
-	private PlaceDBOFactory factory;
+	private DBOFactory<PlaceDBO> factory;
 
 	@Mock
 	private PlaceDBOMapper mapper;
@@ -39,7 +39,7 @@ class PlacePersistenceJPAAdapterTest
 	}
 
 	@Override
-	PlaceDBOFactory factory() {
+	DBOFactory<PlaceDBO> factory() {
 		return factory;
 	}
 

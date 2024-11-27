@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import de.ollie.ahnenbaum.core.model.Gender;
 import de.ollie.ahnenbaum.persistence.entity.GenderDBO;
-import de.ollie.ahnenbaum.persistence.factory.GenderDBOFactory;
+import de.ollie.ahnenbaum.persistence.factory.DBOFactory;
 import de.ollie.ahnenbaum.persistence.mapper.GenderDBOMapper;
 import de.ollie.ahnenbaum.persistence.repository.GenderDBORepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +14,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class GenderPersistenceJPAAdapterTest
-	extends NameProviderPersistenceJPAAdapterTest<Gender, GenderDBO, GenderPersistenceJPAAdapter, GenderDBORepository, GenderDBOMapper, GenderDBOFactory> {
+	extends NameProviderPersistenceJPAAdapterTest<Gender, GenderDBO, GenderPersistenceJPAAdapter, GenderDBORepository, GenderDBOMapper> {
 
 	@Mock
-	private GenderDBOFactory factory;
+	private DBOFactory<GenderDBO> factory;
 
 	@Mock
 	private GenderDBOMapper mapper;
@@ -39,7 +39,7 @@ class GenderPersistenceJPAAdapterTest
 	}
 
 	@Override
-	GenderDBOFactory factory() {
+	DBOFactory<GenderDBO> factory() {
 		return factory;
 	}
 

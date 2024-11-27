@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class DatabaseToJsonMapperTest {
+class DatabaseToJsonMapperTest {
 
 	@InjectMocks
 	private DatabaseToJsonMapper unitUnderTest;

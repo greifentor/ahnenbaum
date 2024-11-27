@@ -17,7 +17,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class NameProviderPersistenceJPAAdapter<M extends NameProvider, D extends NameProvider>
+abstract class NameProviderPersistenceJPAAdapter<M extends NameProvider, D extends NameProvider>
 	implements NameProviderPersistencePort<M> {
 
 	private final String modelClassName = Gender.class.getSimpleName();

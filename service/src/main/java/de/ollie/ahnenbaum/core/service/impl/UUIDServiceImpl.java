@@ -5,7 +5,7 @@ import jakarta.inject.Named;
 import java.util.UUID;
 
 @Named
-public class UUIDServiceImpl implements UUIDService {
+class UUIDServiceImpl implements UUIDService {
 
 	@Override
 	public UUID create() {

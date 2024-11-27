@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class NoSuchRecordExceptionTest {
+class NoSuchRecordExceptionTest {
 
 	private static final String ENTITY_NAME = "Entity-Name";
 	private static final String ID_ATTRIBUTE_NAME = "Id-Attribute-Name";

@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Named
 @RequiredArgsConstructor
-public class PersonDBOFactory {
+class PersonDBOFactory {
 
 	private final UUIDService uuidService;
 

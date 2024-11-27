@@ -4,23 +4,18 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-import de.ollie.ahnenbaum.core.service.UUIDService;
-import de.ollie.ahnenbaum.core.service.impl.UUIDServiceImpl;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-@ExtendWith(MockitoExtension.class)
-public class ProfessionDBOFactoryTest {
+@SpringBootTest
+@ActiveProfiles("test")
+class ProfessionDBOFactoryITest {
 
 	private static final String NAME = "name";
 
-	@Spy
-	private UUIDService uuidService = new UUIDServiceImpl();
-
-	@InjectMocks
+	@Inject
 	private ProfessionDBOFactory unitUnderTest;
 
 	@Test
