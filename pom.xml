@@ -61,6 +61,7 @@
 	<modules>
 		<module>service</module>
 		<module>shell</module>
+		<module>gui-swing</module>
 	</modules>
 	<dependencies>
 		<dependency>

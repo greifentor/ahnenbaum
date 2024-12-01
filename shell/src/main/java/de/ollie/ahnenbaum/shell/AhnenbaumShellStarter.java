@@ -11,10 +11,10 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @ComponentScan("de.ollie")
-public class AhnenbaumShellApplication {
+public class AhnenbaumShellStarter {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AhnenbaumShellApplication.class, args);
+		SpringApplication.run(AhnenbaumShellStarter.class, args);
 	}
 
 }
